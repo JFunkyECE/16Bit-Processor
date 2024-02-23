@@ -52,6 +52,13 @@ architecture sim of ALU_tb is
             Shift <= "0000"; -- Shift by 2 positions
             OpCode <= "0000101"; -- Assuming this is the opcode for shift
             wait for 10 ns;
+            -- Test 6: NAND should output 7
+            A <= X"FFFF"; -- Example value
+            B <= X"FFF8"; 
+            OpCode <= "0000100";
+            wait for 10 ns; 
+            
+            
             
             
             wait; -- Hold simulation here indefinitely
