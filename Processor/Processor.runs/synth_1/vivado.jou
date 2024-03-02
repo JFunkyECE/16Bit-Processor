@@ -3,12 +3,12 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Thu Feb 22 18:25:27 2024
-# Process ID: 34448
-# Current directory: C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.runs/synth_1
+# Start of session at: Sat Mar  2 11:56:47 2024
+# Process ID: 22532
+# Current directory: C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.runs/synth_1
 # Command line: vivado.exe -log ALU_tb.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source ALU_tb.tcl
-# Log file: C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.runs/synth_1/ALU_tb.vds
-# Journal file: C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.runs/synth_1\vivado.jou
+# Log file: C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.runs/synth_1/ALU_tb.vds
+# Journal file: C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.runs/synth_1\vivado.jou
 # Running On: DESKTOP-P73N0JP, OS: Windows, CPU Frequency: 2904 MHz, CPU Physical cores: 8, Host memory: 17100 MB
 #-----------------------------------------------------------
 source ALU_tb.tcl -notrace

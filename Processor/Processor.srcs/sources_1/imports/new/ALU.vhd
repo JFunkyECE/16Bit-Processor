@@ -10,7 +10,7 @@ entity ALU is
         B : in STD_LOGIC_VECTOR(15 downto 0); --could be a register value or an immediate
         OpCode : in STD_LOGIC_VECTOR(6 downto 0); --used to determine which operation is occuring
         C : out STD_LOGIC_VECTOR(15 downto 0); --stores output, CHANGE TO 32 bits
-        Shift : in STD_LOGIC_VECTOR(3 downto 0) --Stores immediate for shifting
+        Shift_value : in STD_LOGIC_VECTOR(3 downto 0) --Stores immediate for shifting
         
         --take in output register location and send to next stage after completion
         --Zero and Negative Flag should be added here aswell
@@ -26,19 +26,34 @@ architecture Behavioral of ALU is
             Data_out : out STD_LOGIC_VECTOR(15 downto 0)
         );
     end component;
-    signal Shift_Result: STD_LOGIC_VECTOR(15 downto 0);
+    signal Shift_Result_Left: STD_LOGIC_VECTOR(15 downto 0);
+    
+    component Right_Shift
+        Port (
+            Data_in : in STD_LOGIC_VECTOR(15 downto 0);
+            Shift_amount : in STD_LOGIC_VECTOR(3 downto 0);
+            Data_out : out STD_LOGIC_VECTOR(15 downto 0)
+        );
+    end component;
+    signal Shift_Result_Right: STD_LOGIC_VECTOR(15 downto 0);
 
 begin
 
-    shift_operation: Left_Shift
+    shift_left_operation: Left_Shift
         port map (
             Data_in => A,
-            Shift_amount => Shift,
-            Data_out => Shift_Result
+            Shift_amount => Shift_value,
+            Data_out => Shift_Result_Left
+        );
+    shift_right_operation: Right_Shift
+        port map (
+            Data_in => A,
+            Shift_amount => Shift_value,
+            Data_out => Shift_Result_Right
         );
         
     -- ALU operation process
-    alu_operation: process(A, B, OpCode, Shift) --any changes to A, B, or Opcode will cause code to execute
+    alu_operation: process(A, B, OpCode, Shift_value, Shift_Result_Left, Shift_Result_Right) --any changes to A, B, or Opcode will cause code to execute
     
         variable a_signed, b_signed: signed(15 downto 0); --two input operands
         variable result_signed: signed(15 downto 0);     --output of alu operation
@@ -67,18 +82,15 @@ begin
                 result_signed := subtract1(a_signed, b_signed);
                 mux_out := std_logic_vector(result_signed);
                 
-            --testing   
             when "0000100" =>  -- OpCode for NAND
                 result_signed := nand1(a_signed, b_signed);
                 mux_out := std_logic_vector(result_signed);
             
-            --unfinished    
-            --when "0000101" =>  -- OpCode for Shifting Left
-             
+            when "0000101" =>  -- OpCode for Shifting Left
+                mux_out := Shift_Result_Left; 
             
-            --unfinished      
             when "0000110" =>  -- OpCode for shifting Right
-                mux_out := Shift_Result; -- Directly take the shift result
+                mux_out := Shift_Result_Right; -- Directly take the shift result
             
             --unfinished
             --when "0000111" =>  -- OpCode for checking Z or N

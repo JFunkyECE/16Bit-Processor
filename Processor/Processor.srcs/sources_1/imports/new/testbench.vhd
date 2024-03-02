@@ -10,7 +10,7 @@ architecture sim of ALU_tb is
     -- Signal declarations
     signal A, B, C : STD_LOGIC_VECTOR(15 downto 0);
     signal OpCode : STD_LOGIC_VECTOR(6 downto 0);
-    signal Shift : STD_LOGIC_VECTOR(3 downto 0); 
+    signal Shift_value : STD_LOGIC_VECTOR(3 downto 0); 
     -- Instantiate the Unit Under Test (UUT)
     begin
         uut: entity work.ALU
@@ -19,7 +19,7 @@ architecture sim of ALU_tb is
             B => B,
             OpCode => OpCode,
             C => C,
-            Shift => Shift
+            Shift_value => Shift_value
         );
 
         -- Test process
@@ -47,12 +47,42 @@ architecture sim of ALU_tb is
             B <= std_logic_vector(to_signed(-340, 16)); 
             OpCode <= "0000001";
             wait for 10 ns; 
-            -- Test 5: Shift left A by 2
-            A <= std_logic_vector(to_signed(8, 16)); -- Example value
-            Shift <= "0000"; -- Shift by 2 positions
+            
+            --LEFT SHIFTING TESTS
+            
+            A <= X"0001"; -- Example value
+            B <= X"0000";
+            Shift_value <= "0001"; -- Shift by 1 positions
             OpCode <= "0000101"; -- Assuming this is the opcode for shift
             wait for 10 ns;
-            -- Test 6: NAND should output 7
+            
+            A <= X"0008"; -- Example value
+            B <= X"0000";
+            Shift_value <= "1000"; -- Shift by 1 positions
+            OpCode <= "0000101"; -- Assuming this is the opcode for shift
+            wait for 10 ns;
+            
+            A <= X"0008"; -- Example value
+            B <= X"0000";
+            Shift_value <= "0000"; -- Shift by 1 positions
+            OpCode <= "0000101"; -- Assuming this is the opcode for shift
+            wait for 10 ns;
+            
+            --RIGHT SHIFTING TESTS
+            A <= X"0008"; -- Example value
+            B <= X"0000";
+            Shift_value <= "0001"; -- Shift by 1 positions
+            OpCode <= "0000110"; -- Assuming this is the opcode for shift
+            wait for 10 ns;
+            
+            A <= X"0006"; -- Example value
+            B <= X"0000";
+            Shift_value <= "0001"; -- Shift by 1 positions
+            OpCode <= "0000110"; -- Assuming this is the opcode for shift
+            wait for 10 ns;
+            
+            --NAND TESTS
+--            -- Test 6: NAND should output 7
             A <= X"FFFF"; -- Example value
             B <= X"FFF8"; 
             OpCode <= "0000100";

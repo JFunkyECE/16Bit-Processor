@@ -3,6 +3,7 @@ vhdl xil_defaultlib  \
 "../../../../Processor.srcs/sources_1/new/AddSubNand.vhd" \
 "../../../../Processor.srcs/sources_1/imports/new/ALU.vhd" \
 "../../../../Processor.srcs/sources_1/imports/new/Left_Shift.vhd" \
+"../../../../Processor.srcs/sources_1/new/Right_Shift.vhd" \
 "../../../../Processor.srcs/sources_1/imports/new/testbench.vhd" \
 
 # Do not sort compile order

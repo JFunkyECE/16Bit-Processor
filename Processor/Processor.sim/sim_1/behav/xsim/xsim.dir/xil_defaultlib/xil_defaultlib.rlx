@@ -2,8 +2,10 @@
 2020.2
 Oct 13 2023
 20:47:58
-C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd,1708655121,vhdl,C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd,,,alu,,,,,,,,
+C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd,1709408999,vhdl,C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd,,,alu,,,,,,,,
+C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/Left_Shift.vhd,1709406891,vhdl,,,,left_shift,,,,,,,,
+C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd,1709407466,vhdl,,,,alu_tb,,,,,,,,
+C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/new/AddSubNand.vhd,1708654567,vhdl,C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd,,,addsubnand,,,,,,,,
+C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/new/Right_Shift.vhd,1709409373,vhdl,,,,right_shift,,,,,,,,
+C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/new/Shift.vhd,1709407892,vhdl,,,,shift,,,,,,,,
 C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.srcs/sources_1/imports/new/AddSub.vhd,1708378942,vhdl,C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd,,,addsub,,,,,,,,
-C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.srcs/sources_1/imports/new/Left_Shift.vhd,1708491962,vhdl,,,,left_shift,,,,,,,,
-C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd,1708491999,vhdl,,,,alu_tb,,,,,,,,
-C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.srcs/sources_1/new/AddSubNand.vhd,1708654567,vhdl,C:/Users/jacob/OneDrive/Desktop/449/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd,,,addsubnand,,,,,,,,
