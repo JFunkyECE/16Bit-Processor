@@ -11,6 +11,7 @@ architecture sim of ALU_tb is
     signal A, B, C : STD_LOGIC_VECTOR(15 downto 0);
     signal OpCode : STD_LOGIC_VECTOR(6 downto 0);
     signal Shift_value : STD_LOGIC_VECTOR(3 downto 0); 
+    signal Zero_Negative_flags : STD_LOGIC_VECTOR(1 downto 0); 
     -- Instantiate the Unit Under Test (UUT)
     begin
         uut: entity work.ALU
@@ -19,7 +20,8 @@ architecture sim of ALU_tb is
             B => B,
             OpCode => OpCode,
             C => C,
-            Shift_value => Shift_value
+            Shift_value => Shift_value,
+            Zero_Negative_flags => Zero_Negative_flags
         );
 
         -- Test process
@@ -88,7 +90,19 @@ architecture sim of ALU_tb is
             OpCode <= "0000100";
             wait for 10 ns; 
             
+            --TEST CONDITION FLAGS
+            A <= X"FFFF";
+            OpCode <= "0000111";
+            wait for 10ns;
             
+            A <= X"0FFF";
+            OpCode <= "0000111";
+            wait for 10ns;
+            
+            A <= X"0000";
+            OpCode <= "0000111";
+            wait for 10ns;
+
             
             
             wait; -- Hold simulation here indefinitely

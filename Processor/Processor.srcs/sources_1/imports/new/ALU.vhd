@@ -10,10 +10,11 @@ entity ALU is
         B : in STD_LOGIC_VECTOR(15 downto 0); --could be a register value or an immediate
         OpCode : in STD_LOGIC_VECTOR(6 downto 0); --used to determine which operation is occuring
         C : out STD_LOGIC_VECTOR(15 downto 0); --stores output, CHANGE TO 32 bits
-        Shift_value : in STD_LOGIC_VECTOR(3 downto 0) --Stores immediate for shifting
+        Shift_value : in STD_LOGIC_VECTOR(3 downto 0); --Stores immediate for shifting
         
         --take in output register location and send to next stage after completion
         --Zero and Negative Flag should be added here aswell
+        Zero_Negative_flags : out STD_LOGIC_VECTOR(1 downto 0) -- lsb is negative, msb is zero
     );
 end ALU;
 
@@ -92,11 +93,17 @@ begin
             when "0000110" =>  -- OpCode for shifting Right
                 mux_out := Shift_Result_Right; -- Directly take the shift result
             
-            --unfinished
-            --when "0000111" =>  -- OpCode for checking Z or N
-                
-               
-            
+            when "0000111" =>  -- OpCode for checking Z or N for register A
+                if A(15) = '1' then
+                    Zero_Negative_flags(0) <= '1';
+                else
+                    Zero_Negative_flags(0) <= '0';
+                end if;
+                if A = X"0000" then
+                    Zero_Negative_flags(1) <= '1';
+                else
+                    Zero_Negative_flags(1) <= '0';
+                end if;
             when others => 
                 mux_out := (others => '0'); -- Default case
          end case;
