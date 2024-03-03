@@ -41,4 +41,4 @@ EAStep()
      fi
 }
 
-EAStep vivado -log ALU_tb.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source ALU_tb.tcl
+EAStep vivado -log tb_register_file.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source tb_register_file.tcl
