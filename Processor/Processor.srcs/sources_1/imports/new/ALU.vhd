@@ -37,6 +37,15 @@ architecture Behavioral of ALU is
         );
     end component;
     signal Shift_Result_Right: STD_LOGIC_VECTOR(15 downto 0);
+    
+    component Wallace_16x16_Multiplier 
+        Port ( 
+            A : in  STD_LOGIC_VECTOR (15 downto 0);
+            B :    in  STD_LOGIC_VECTOR (15 downto 0);
+            prod : out  STD_LOGIC_VECTOR (31 downto 0)
+        );
+    end component Wallace_16x16_Multiplier;
+    signal prod_out: STD_LOGIC_VECTOR(31 downto 0);
 
 begin
 
@@ -53,8 +62,15 @@ begin
             Data_out => Shift_Result_Right
         );
         
+     Mult_operation: Wallace_16x16_Multiplier
+        port map(
+            A => A, 
+            B => B, 
+            prod => prod_out 
+        );
+        
     -- ALU operation process
-    alu_operation: process(A, B, OpCode, Shift_value, Shift_Result_Left, Shift_Result_Right) --any changes to A, B, or Opcode will cause code to execute
+    alu_operation: process(A, B, OpCode, Shift_value, Shift_Result_Left, Shift_Result_Right, prod_out) --any changes to A, B, or Opcode will cause code to execute
     
         variable a_signed, b_signed: signed(15 downto 0); --two input operands
         variable result_signed: signed(15 downto 0);     --output of alu operation
@@ -80,7 +96,7 @@ begin
             
             --unfinished    
             when "0000011" =>  -- OpCode for multiplication
-                result_signed := subtract1(a_signed, b_signed);
+                result_signed := signed(prod_out(15 downto 0));
                 mux_out := std_logic_vector(result_signed);
                 
             when "0000100" =>  -- OpCode for NAND

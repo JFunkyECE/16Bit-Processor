@@ -14,9 +14,8 @@ ECHO is off.
     ** Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 
 source ALU_tb.tcl -notrace
-create_project: Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 485.289 ; gain = 181.035
-Command: read_checkpoint -auto_incremental -incremental C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/utils_1/imports/synth_1/ALU_tb.dcp
-INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/utils_1/imports/synth_1/ALU_tb.dcp for incremental synthesis
+Command: read_checkpoint -auto_incremental -incremental C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/utils_1/imports/synth_1/ALU_tb.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/utils_1/imports/synth_1/ALU_tb.dcp for incremental synthesis
 INFO: [Vivado 12-7989] Please ensure there are no constraint changes
 Command: synth_design -top ALU_tb -part xc7a35tcpg236-1
 Starting synth_design
@@ -26,51 +25,159 @@ INFO: [Designutils 20-5440] No compile time benefit to using incremental synthes
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 13912
+INFO: [Synth 8-7075] Helper process launched with PID 22872
 ---------------------------------------------------------------------------------
-Starting Synthesize : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 937.301 ; gain = 438.754
+Starting Synthesize : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 924.812 ; gain = 440.363
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-638] synthesizing module 'ALU_tb' [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:9]
-INFO: [Synth 8-638] synthesizing module 'ALU' [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:21]
-INFO: [Synth 8-3491] module 'Left_Shift' declared at 'C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/Left_Shift.vhd:5' bound to instance 'shift_left_operation' of component 'Left_Shift' [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:43]
-INFO: [Synth 8-638] synthesizing module 'Left_Shift' [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/Left_Shift.vhd:13]
-INFO: [Synth 8-256] done synthesizing module 'Left_Shift' (0#1) [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/Left_Shift.vhd:13]
-INFO: [Synth 8-3491] module 'Right_Shift' declared at 'C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/new/Right_Shift.vhd:5' bound to instance 'shift_right_operation' of component 'Right_Shift' [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:49]
-INFO: [Synth 8-638] synthesizing module 'Right_Shift' [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/new/Right_Shift.vhd:13]
-INFO: [Synth 8-256] done synthesizing module 'Right_Shift' (0#1) [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/new/Right_Shift.vhd:13]
-INFO: [Synth 8-256] done synthesizing module 'ALU' (0#1) [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:21]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:34]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:40]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:46]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:51]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:59]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:65]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:71]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:78]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:84]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:91]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:96]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:100]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:104]
-INFO: [Synth 8-256] done synthesizing module 'ALU_tb' (0#1) [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:9]
+INFO: [Synth 8-638] synthesizing module 'ALU_tb' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:9]
+INFO: [Synth 8-638] synthesizing module 'ALU' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:21]
+INFO: [Synth 8-3491] module 'Left_Shift' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/Left_Shift.vhd:5' bound to instance 'shift_left_operation' of component 'Left_Shift' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:52]
+INFO: [Synth 8-638] synthesizing module 'Left_Shift' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/Left_Shift.vhd:13]
+INFO: [Synth 8-256] done synthesizing module 'Left_Shift' (0#1) [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/Left_Shift.vhd:13]
+INFO: [Synth 8-3491] module 'Right_Shift' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/Right_Shift.vhd:5' bound to instance 'shift_right_operation' of component 'Right_Shift' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:58]
+INFO: [Synth 8-638] synthesizing module 'Right_Shift' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/Right_Shift.vhd:13]
+INFO: [Synth 8-256] done synthesizing module 'Right_Shift' (0#1) [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/Right_Shift.vhd:13]
+INFO: [Synth 8-3491] module 'Wallace_16x16_Multiplier' declared at 'C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:34' bound to instance 'Mult_operation' of component 'Wallace_16x16_Multiplier' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:65]
+INFO: [Synth 8-638] synthesizing module 'Wallace_16x16_Multiplier' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:42]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha1' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:142]
+INFO: [Synth 8-638] synthesizing module 'HA' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:23]
+INFO: [Synth 8-256] done synthesizing module 'HA' (0#1) [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:23]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa1' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:143]
+INFO: [Synth 8-638] synthesizing module 'FullAdder' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:23]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'HA0' of component 'HA' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:40]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'HA1' of component 'HA' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:41]
+INFO: [Synth 8-256] done synthesizing module 'FullAdder' (0#1) [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:23]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa2' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:144]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa3' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:145]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa4' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:146]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa5' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:147]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa6' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:148]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa7' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:149]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa8' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:150]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa9' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:151]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa10' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:152]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa11' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:153]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa12' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:154]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa13' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:155]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa14' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:156]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha2' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:157]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha3' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:160]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa15' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:161]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa16' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:162]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa17' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:163]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa18' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:164]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa19' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:165]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa20' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:166]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa21' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:167]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa22' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:168]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa23' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:169]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa24' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:170]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa25' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:171]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa26' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:172]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa27' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:173]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa28' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:174]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha4' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:175]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha5' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:178]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa29' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:179]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa30' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:180]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa31' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:181]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa32' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:182]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa33' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:183]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa34' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:184]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa35' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:185]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa36' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:186]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa37' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:187]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa38' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:188]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa39' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:189]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa40' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:190]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa41' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:191]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa42' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:192]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha6' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:193]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha7' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:196]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa43' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:197]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa44' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:198]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa45' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:199]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa46' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:200]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa47' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:201]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa48' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:202]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa49' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:203]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa50' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:204]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa51' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:205]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa52' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:206]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa53' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:207]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa54' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:208]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa55' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:209]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa56' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:210]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha8' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:211]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha9' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:214]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa57' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:215]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa58' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:216]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa59' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:217]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa60' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:218]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa61' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:219]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa62' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:220]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa63' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:221]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa64' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:222]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa65' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:223]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa66' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:224]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa67' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:225]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa68' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:226]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa69' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:227]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa70' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:228]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha10' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:229]
+INFO: [Synth 8-3491] module 'HA' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/HalfAdder.vhd:15' bound to instance 'ha11' of component 'HA' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:232]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa71' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:233]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa72' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:234]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa73' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:235]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa74' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:236]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa75' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:237]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa76' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:238]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa77' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:239]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa78' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:240]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa79' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:241]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa80' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:242]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa81' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:243]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa82' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:244]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa83' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:245]
+INFO: [Synth 8-3491] module 'FullAdder' declared at 'C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/new/FullAdder.vhd:15' bound to instance 'fa84' of component 'FullAdder' [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:246]
+INFO: [Common 17-14] Message 'Synth 8-3491' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Synth 8-256] done synthesizing module 'Wallace_16x16_Multiplier' (0#1) [C:/Users/zacha/16Bit-Processor/Wallace_16x16_Multiplier.vhd:42]
+INFO: [Synth 8-256] done synthesizing module 'ALU' (0#1) [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:21]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:35]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:41]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:47]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:52]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:59]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:64]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:69]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:77]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:83]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:89]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:96]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:102]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:109]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:114]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:118]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: wait statement with no conditon [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:122]
+INFO: [Synth 8-256] done synthesizing module 'ALU_tb' (0#1) [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/testbench.vhd:9]
 ---------------------------------------------------------------------------------
-Finished Synthesize : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 1046.754 ; gain = 548.207
+Finished Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1042.016 ; gain = 557.566
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1046.754 ; gain = 548.207
+Finished Constraint Validation : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 1042.016 ; gain = 557.566
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcpg236-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1046.754 ; gain = 548.207
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 1042.016 ; gain = 557.566
 ---------------------------------------------------------------------------------
 INFO: [Device 21-403] Loading part xc7a35tcpg236-1
-WARNING: [Synth 8-327] inferring latch for variable 'alu_operation.mux_out_reg' [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:75]
-WARNING: [Synth 8-327] inferring latch for variable 'Zero_Negative_flags_reg' [C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:99]
+WARNING: [Synth 8-327] inferring latch for variable 'alu_operation.mux_out_reg' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:91]
+WARNING: [Synth 8-327] inferring latch for variable 'Zero_Negative_flags_reg' [C:/Users/zacha/16Bit-Processor/Processor/Processor.srcs/sources_1/imports/new/ALU.vhd:114]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1046.754 ; gain = 548.207
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1042.016 ; gain = 557.566
 ---------------------------------------------------------------------------------
 No constraint files found.
 ---------------------------------------------------------------------------------
@@ -79,6 +186,8 @@ Start RTL Component Statistics
 Detailed RTL Component Info : 
 +---Adders : 
 	   3 Input   16 Bit       Adders := 1     
++---XORs : 
+	   2 Input      1 Bit         XORs := 499   
 +---Muxes : 
 	   2 Input   16 Bit        Muxes := 2     
 	   8 Input   16 Bit        Muxes := 1     
@@ -120,20 +229,20 @@ WARNING: [Synth 8-3332] Sequential element (uut/alu_operation.mux_out_reg[0]) is
 WARNING: [Synth 8-3332] Sequential element (uut/Zero_Negative_flags_reg[1]) is unused and will be removed from module ALU_tb.
 WARNING: [Synth 8-3332] Sequential element (uut/Zero_Negative_flags_reg[0]) is unused and will be removed from module ALU_tb.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 No constraint files found.
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Timing Optimization : Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Technology Mapping : Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -151,37 +260,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished IO Insertion : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -206,25 +315,25 @@ Report Instance Areas:
 |1     |top      |       |     0|
 +------+---------+-------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 34 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
-Synthesis Optimization Complete : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1227.312 ; gain = 728.766
+Synthesis finished with 0 errors, 0 critical warnings and 37 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
+Synthesis Optimization Complete : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 1212.555 ; gain = 728.105
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1227.312 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1212.555 ; gain = 0.000
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1325.977 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1313.781 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
 The system cannot find the path specified.
 Synth Design complete | Checksum: 114efbfd
 INFO: [Common 17-83] Releasing license: Synthesis
-24 Infos, 34 Warnings, 0 Critical Warnings and 0 Errors encountered.
+129 Infos, 37 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 1325.977 ; gain = 836.719
-INFO: [Common 17-1381] The checkpoint 'C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/Processor/Processor.runs/synth_1/ALU_tb.dcp' has been generated.
+synth_design: Time (s): cpu = 00:00:12 ; elapsed = 00:00:16 . Memory (MB): peak = 1313.781 ; gain = 837.320
+INFO: [Common 17-1381] The checkpoint 'C:/Users/zacha/16Bit-Processor/Processor/Processor.runs/synth_1/ALU_tb.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file ALU_tb_utilization_synth.rpt -pb ALU_tb_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Sat Mar  2 13:11:35 2024...
+INFO: [Common 17-206] Exiting Vivado at Sun Mar  3 21:25:51 2024...

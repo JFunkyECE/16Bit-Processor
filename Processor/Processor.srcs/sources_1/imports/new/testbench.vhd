@@ -8,9 +8,10 @@ end entity ALU_tb;
 
 architecture sim of ALU_tb is
     -- Signal declarations
-    signal A, B, C : STD_LOGIC_VECTOR(15 downto 0);
+    signal A, B : STD_LOGIC_VECTOR(15 downto 0);
     signal OpCode : STD_LOGIC_VECTOR(6 downto 0);
-    signal Shift_value : STD_LOGIC_VECTOR(3 downto 0); 
+    signal Shift_value : STD_LOGIC_VECTOR(3 downto 0);
+    signal prod_tb : STD_LOGIC_VECTOR(31 downto 0) := (others => '0'); 
     signal Zero_Negative_flags : STD_LOGIC_VECTOR(1 downto 0); 
     -- Instantiate the Unit Under Test (UUT)
     begin
@@ -19,7 +20,7 @@ architecture sim of ALU_tb is
             A => A,
             B => B,
             OpCode => OpCode,
-            C => C,
+            C => prod_tb(15 downto 0),
             Shift_value => Shift_value,
             Zero_Negative_flags => Zero_Negative_flags
         );
@@ -49,6 +50,23 @@ architecture sim of ALU_tb is
             B <= std_logic_vector(to_signed(-340, 16)); 
             OpCode <= "0000001";
             wait for 10 ns; 
+            
+            --Wallace Tree Testing
+            
+            A <= X"ffff"; 
+            B <= X"f0ef"; 
+            OpCode <= "0000011";
+            wait for 10 ns;
+            
+            A <= X"0bef"; 
+            B <= X"0add"; 
+            OpCode <= "0000011";
+            wait for 10 ns;
+            
+            A <= X"0003"; 
+            B <= X"0005"; 
+            OpCode <= "0000011";
+            wait for 10 ns;            
             
             --LEFT SHIFTING TESTS
             
