@@ -3,8 +3,8 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Sat Mar  2 21:22:50 2024
-# Process ID: 25936
+# Start of session at: Sun Mar  3 19:09:53 2024
+# Process ID: 35392
 # Current directory: C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/registertesting/registers/registers.runs/synth_1
 # Command line: vivado.exe -log tb_register_file.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source tb_register_file.tcl
 # Log file: C:/Users/jacob/OneDrive/Desktop/449/16Bit-Processor/registertesting/registers/registers.runs/synth_1/tb_register_file.vds

@@ -1,0 +1,8 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../processortesting.srcs/sources_1/imports/sources_1/new/Controller.vhd" \
+"../../../../processortesting.srcs/sources_1/new/RF8_16.vhd" \
+"../../../../processortesting.srcs/sources_1/new/controller_testbench.vhd" \
+
+# Do not sort compile order
+nosort

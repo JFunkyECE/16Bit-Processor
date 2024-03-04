@@ -53,12 +53,12 @@ rd_data1 <=
             reg_file(6) when(rd_index1="110") else reg_file(7);
 
 rd_data2 <=
-            reg_file(0) when(rd_index1="000") else
-            reg_file(1) when(rd_index1="001") else
-            reg_file(2) when(rd_index1="010") else
-            reg_file(3) when(rd_index1="011") else
-            reg_file(4) when(rd_index1="100") else
-            reg_file(5) when(rd_index1="101") else
-            reg_file(6) when(rd_index1="110") else reg_file(7);
+            reg_file(0) when(rd_index2="000") else
+            reg_file(1) when(rd_index2="001") else
+            reg_file(2) when(rd_index2="010") else
+            reg_file(3) when(rd_index2="011") else
+            reg_file(4) when(rd_index2="100") else
+            reg_file(5) when(rd_index2="101") else
+            reg_file(6) when(rd_index2="110") else reg_file(7);
             
 end behavioural;
