@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 ENTITY Control_Read_and_Write_tb  IS
 END Control_Read_and_Write_tb ;
@@ -12,11 +13,12 @@ ARCHITECTURE behavior OF Control_Read_and_Write_tb  IS
 
     SIGNAL rst : STD_LOGIC := '1';
 
-    SIGNAL EX_write_enable_IN : STD_LOGIC := '0';
-    SIGNAL EX_NegativeZero_IN : STD_LOGIC_VECTOR(1 downto 0) := (others => '0');
-    SIGNAL EX_opcodeIn : STD_LOGIC_VECTOR(6 downto 0) := (others => '0');
-    SIGNAL EX_ALU_data_IN : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
-    SIGNAL EX_R_out_address_IN : STD_LOGIC_VECTOR(2 downto 0) := (others => '0');
+    SIGNAL DC_R_data1_IN : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
+    SIGNAL DC_R_data2_IN : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
+    SIGNAL DC_R_out_address_IN :  STD_LOGIC_VECTOR(2 downto 0) := (others => '0');
+    SIGNAL DC_Write_Enable_IN : STD_LOGIC := '0';
+    SIGNAL DC_Opcode_IN : STD_LOGIC_VECTOR(6 downto 0) := (others => '0');
+    SIGNAL DC_Shift_IN : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
 
     SIGNAL rd_index1: STD_LOGIC_VECTOR(2 downto 0) := (others => '0'); 
     SIGNAL rd_index2: STD_LOGIC_VECTOR(2 downto 0) := (others => '0'); 
@@ -27,11 +29,12 @@ ARCHITECTURE behavior OF Control_Read_and_Write_tb  IS
     PORT(
          clk : IN STD_LOGIC;
          rst : IN STD_LOGIC;
-         EX_write_enable_IN : IN STD_LOGIC;
-         EX_NegativeZero_IN : IN STD_LOGIC_VECTOR(1 downto 0);
-         EX_opcodeIn : IN STD_LOGIC_VECTOR(6 downto 0);
-         EX_ALU_data_IN : IN STD_LOGIC_VECTOR(15 downto 0);
-         EX_R_out_address_IN : IN STD_LOGIC_VECTOR(2 downto 0);
+         DC_R_data1_IN : IN STD_LOGIC_VECTOR(15 downto 0);
+         DC_R_data2_IN : IN STD_LOGIC_VECTOR(15 downto 0);
+         DC_R_out_address_IN : IN STD_LOGIC_VECTOR(2 downto 0);
+         DC_Write_Enable_IN : IN STD_LOGIC;
+         DC_Opcode_IN : STD_LOGIC_VECTOR(6 downto 0);
+         DC_Shift_IN : STD_LOGIC_VECTOR(3 downto 0);
          rd_index1 : IN STD_LOGIC_VECTOR(2 downto 0); 
          rd_index2 : IN STD_LOGIC_VECTOR(2 downto 0); 
          rd_data1 : OUT STD_LOGIC_VECTOR(15 downto 0); 
@@ -53,11 +56,12 @@ BEGIN
    uut: Control_Read_and_Write PORT MAP (
           clk => clk,
           rst => rst,
-          EX_write_enable_IN => EX_write_enable_IN,
-          EX_NegativeZero_IN => EX_NegativeZero_IN,
-          EX_opcodeIn => EX_opcodeIn,
-          EX_ALU_data_IN => EX_ALU_data_IN,
-          EX_R_out_address_IN => EX_R_out_address_IN,
+          DC_R_data1_IN => DC_R_data1_IN,
+          DC_R_data2_IN => DC_R_data2_IN,
+          DC_R_out_address_IN => DC_R_out_address_IN,
+          DC_Write_Enable_IN => DC_Write_Enable_IN,
+          DC_Opcode_IN => DC_Opcode_IN,
+          DC_Shift_IN => DC_Shift_IN,
           rd_index1 => rd_index1,
           rd_index2 => rd_index2,
           rd_data1 => rd_data1,
@@ -74,22 +78,23 @@ BEGIN
         rd_index1 <= "000";
         rd_index2 <= "001";
         
-        EX_write_enable_IN <= '1';
-        EX_NegativeZero_IN <= "00";
-        EX_opcodeIn <= "0000000";
-        EX_ALU_data_IN <= X"8008"; 
-        EX_R_out_address_IN <= "000";
+        
+        for i in 0 to 6 loop
+            DC_R_data1_IN <= X"1001";
+            DC_R_data2_IN <= X"0002";
+            DC_R_out_address_IN <= "000";
+            DC_Write_Enable_IN <= '1';
+            DC_Opcode_IN <= std_logic_vector(to_unsigned(i, DC_Opcode_IN'length));
+            DC_Shift_IN <= "1001";
+            wait for clk_period;
+        end loop;
+        
         wait for clk_period;
-        EX_ALU_data_IN <= X"1010"; 
-        EX_R_out_address_IN <= "001";
+
         wait for clk_period;
-        EX_ALU_data_IN <= X"1111"; 
-        EX_R_out_address_IN <= "000";
+
         wait for clk_period;
-        EX_ALU_data_IN <= X"9999"; 
-        EX_R_out_address_IN <= "001";
-        wait for clk_period;
-        EX_write_enable_IN <= '0';
+
 
 
         WAIT; -- Wait forever; the simulation will stop here
