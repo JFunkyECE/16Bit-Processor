@@ -6,18 +6,14 @@ entity Fetch_Latch is
       clk : in STD_LOGIC;
       
       --inputs
-      OpcodeIn : in STD_LOGIC_VECTOR(6 downto 0);
-      R_in1_address_IN : in STD_LOGIC_VECTOR(15 downto 0);
-      R_in2_address_IN : in STD_LOGIC_VECTOR(15 downto 0);
-      R_out_address_IN : in STD_LOGIC_VECTOR(2 downto 0);
-      shift_IN : in STD_LOGIC_VECTOR(3 downto 0);
+      Instruction : IN STD_LOGIC_VECTOR(15 downto 0);
       
       --outputs
-      OpcodeOut : out STD_LOGIC_VECTOR(6 downto 0);
-      R_in1_address_OUT : out STD_LOGIC_VECTOR(15 downto 0);
-      R_in2_address_OUT : out STD_LOGIC_VECTOR(15 downto 0);
-      R_out_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
-      shift_OUT : out STD_LOGIC_VECTOR(3 downto 0)
+      F_OpcodeOut : out STD_LOGIC_VECTOR(6 downto 0);
+      F_R_in1_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
+      F_R_in2_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
+      F_R_out_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
+      F_shift_OUT : out STD_LOGIC_VECTOR(3 downto 0)
   );
 end Fetch_Latch;
 
@@ -28,11 +24,11 @@ begin
     process(clk)
         begin
             if rising_edge(clk) then --Data is always set on the rising edge of the clock
-               OpcodeOut <= OpcodeIn;
-                R_in1_address_OUT <= R_in1_address_IN;
-                R_in2_address_OUT <= R_in2_address_IN;
-                R_out_address_OUT <= R_out_address_IN;
-                shift_OUT <= shift_IN;            
+                F_OpcodeOut <= Instruction(15 downto 9);
+                F_R_in1_address_OUT <= Instruction(5 downto 3);
+                F_R_in2_address_OUT <= Instruction(2 downto 0);
+                F_R_out_address_OUT <= Instruction(8 downto 6);
+                F_shift_OUT <= Instruction(3 downto 0);            
             end if;
             end process;
 

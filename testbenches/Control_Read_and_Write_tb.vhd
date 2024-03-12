@@ -13,32 +13,20 @@ ARCHITECTURE behavior OF Control_Read_and_Write_tb  IS
 
     SIGNAL rst : STD_LOGIC := '1';
 
-    SIGNAL DC_R_data1_IN : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
-    SIGNAL DC_R_data2_IN : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
-    SIGNAL DC_R_out_address_IN :  STD_LOGIC_VECTOR(2 downto 0) := (others => '0');
-    SIGNAL DC_Write_Enable_IN : STD_LOGIC := '0';
-    SIGNAL DC_Opcode_IN : STD_LOGIC_VECTOR(6 downto 0) := (others => '0');
-    SIGNAL DC_Shift_IN : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
-
-    SIGNAL rd_index1: STD_LOGIC_VECTOR(2 downto 0) := (others => '0'); 
-    SIGNAL rd_index2: STD_LOGIC_VECTOR(2 downto 0) := (others => '0'); 
-    SIGNAL rd_data1: STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL rd_data2: STD_LOGIC_VECTOR(15 downto 0);
-
+    SIGNAL Instruction : STD_LOGIC_VECTOR(15 downto 0) := X"0000";
+    SIGNAL INPUT_SIGNAL : STD_LOGIC_VECTOR(15 downto 0) := X"0000";
+    
+    SIGNAL read_data1 : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL read_data2 : STD_LOGIC_VECTOR(15 downto 0);
+    
     COMPONENT Control_Read_and_Write
     PORT(
          clk : IN STD_LOGIC;
          rst : IN STD_LOGIC;
-         DC_R_data1_IN : IN STD_LOGIC_VECTOR(15 downto 0);
-         DC_R_data2_IN : IN STD_LOGIC_VECTOR(15 downto 0);
-         DC_R_out_address_IN : IN STD_LOGIC_VECTOR(2 downto 0);
-         DC_Write_Enable_IN : IN STD_LOGIC;
-         DC_Opcode_IN : STD_LOGIC_VECTOR(6 downto 0);
-         DC_Shift_IN : STD_LOGIC_VECTOR(3 downto 0);
-         rd_index1 : IN STD_LOGIC_VECTOR(2 downto 0); 
-         rd_index2 : IN STD_LOGIC_VECTOR(2 downto 0); 
-         rd_data1 : OUT STD_LOGIC_VECTOR(15 downto 0); 
-         rd_data2 : OUT STD_LOGIC_VECTOR(15 downto 0)
+         Instruction : IN STD_LOGIC_VECTOR(15 downto 0);
+         INPUT_SIGNAL : IN STD_LOGIC_VECTOR(15 downto 0);
+         read_data1 : out STD_LOGIC_VECTOR(15 downto 0);
+         read_data2 : out STD_LOGIC_VECTOR(15 downto 0)
         );
     END COMPONENT;
     --
@@ -56,16 +44,10 @@ BEGIN
    uut: Control_Read_and_Write PORT MAP (
           clk => clk,
           rst => rst,
-          DC_R_data1_IN => DC_R_data1_IN,
-          DC_R_data2_IN => DC_R_data2_IN,
-          DC_R_out_address_IN => DC_R_out_address_IN,
-          DC_Write_Enable_IN => DC_Write_Enable_IN,
-          DC_Opcode_IN => DC_Opcode_IN,
-          DC_Shift_IN => DC_Shift_IN,
-          rd_index1 => rd_index1,
-          rd_index2 => rd_index2,
-          rd_data1 => rd_data1,
-          rd_data2 => rd_data2
+          Instruction => Instruction,
+          INPUT_SIGNAL => INPUT_SIGNAL,
+          read_data1 => read_data1,
+          read_data2 => read_data2
         );
 
     -- Test process
@@ -75,27 +57,28 @@ BEGIN
         wait for clk_period*2;  
         rst <= '0';  -- Release reset
         -- Add stimulus here
-        rd_index1 <= "000";
-        rd_index2 <= "001";
         
-        
-        for i in 0 to 6 loop
-            DC_R_data1_IN <= X"1001";
-            DC_R_data2_IN <= X"0002";
-            DC_R_out_address_IN <= "000";
-            DC_Write_Enable_IN <= '1';
-            DC_Opcode_IN <= std_logic_vector(to_unsigned(i, DC_Opcode_IN'length));
-            DC_Shift_IN <= "1001";
-            wait for clk_period;
-        end loop;
-        
+--        for i in 0 to 6 loop
+--            DC_R_data1_IN <= X"1001";
+--            DC_R_data2_IN <= X"0002";
+--            DC_R_out_address_IN <= "000";
+--            DC_Write_Enable_IN <= '1';
+--            DC_Opcode_IN <= std_logic_vector(to_unsigned(i, DC_Opcode_IN'length));
+--            DC_Shift_IN <= "1001";
+--            wait for clk_period;
+--        end loop;
+        INPUT_SIGNAL <= X"0001";
+        Instruction <= "0100001000000000";
         wait for clk_period;
-
+        Instruction <= "0000000000000000";
         wait for clk_period;
-
-        wait for clk_period;
-
-
+--        INPUT_SIGNAL <= X"0002";
+--        Instruction <= "0100001001000000";
+--        wait for clk_period;
+--        Instruction <= X"0000";
+--        wait for clk_period * 3;
+--        Instruction <= "0000001010000001";
+--        wait for clk_period;
 
         WAIT; -- Wait forever; the simulation will stop here
     END PROCESS;
