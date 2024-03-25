@@ -34,10 +34,6 @@ architecture Behavioral of Control is
     signal R_in2_address_F : STD_LOGIC_VECTOR(2 downto 0);
     signal R_out_address_F : STD_LOGIC_VECTOR(2 downto 0);
     signal shift_F : STD_LOGIC_VECTOR(3 downto 0); 
-    
-    --signals for FWD_MUX
---    signal MUX_ALU_DATA1 : STD_LOGIC_VECTOR (15 downto 0);
---    signal MUX_ALU_DATA2 : STD_LOGIC_VECTOR (15 downto 0);
 
     --signals for Forwarding_Unit
     signal Forward_ALU_data1 : STD_LOGIC_VECTOR (15 downto 0);
@@ -169,7 +165,9 @@ architecture Behavioral of Control is
             Forward_DC_Rin2_IN : in STD_LOGIC_VECTOR(2 downto 0);
             Forward_EX_Rout_IN : in STD_LOGIC_VECTOR(2 downto 0);
             Forward_WB_Rout_IN : in STD_LOGIC_VECTOR(2 downto 0);
-            Forward_Write_Enable_IN : in STD_LOGIC;
+            Forward_DC_Write_Enable_IN : in STD_LOGIC;
+            Forward_EX_Write_Enable_IN : in STD_LOGIC;
+            Forward_WB_Enable_IN : in STD_LOGIC;
             --outputs
             data_A_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             data_B_OUT : out STD_LOGIC_VECTOR(15 downto 0)   
@@ -232,11 +230,12 @@ begin
                                             DC_WB_Select => Select_DC);
                                             
 
-    Forwarding_Unit_INST : Forwarding_Unit port map(Forward_Write_Enable_IN => WR_Enable_DC,Forward_EX_IN => Data_EX_WB, Forward_WB_IN => WB_R_outdata_OUT, Forward_DC_data1_IN => R_data1_DC,
+    Forwarding_Unit_INST : Forwarding_Unit port map(Forward_EX_IN => Data_EX_WB, Forward_WB_IN => WB_R_outdata_OUT, Forward_DC_data1_IN => R_data1_DC,
                                                     Forward_DC_data2_IN => R_data2_DC, Forward_DC_Rin1_IN => R_in1_address_DC_EX,
                                                     Forward_DC_Rin2_IN => R_in2_address_DC_EX, Forward_EX_Rout_IN => Data_Addr_EX_WB,
-                                                    Forward_WB_Rout_IN => WB_R_outaddress_OUT, data_A_OUT => Forward_ALU_data1,
-                                                    data_B_OUT => Forward_ALU_data2);
+                                                    Forward_WB_Rout_IN => WB_R_outaddress_OUT, Forward_DC_Write_Enable_IN => WR_Enable_DC,
+                                                    Forward_EX_Write_Enable_IN => Write_Enable_EX_WB, Forward_WB_Enable_IN => WB_EN_OUT,
+                                                    data_A_OUT => Forward_ALU_data1, data_B_OUT => Forward_ALU_data2);
 
     EX_Latch_INST : Execute_Latch port map(clk=>clk, EX_write_enable_IN => WR_Enable_DC, EX_NegativeZero_IN => Zero_Negative,
                                            EX_opcodeIn => Opcode_DC, EX_ALU_data_IN => R_data_ALU_OUT,
