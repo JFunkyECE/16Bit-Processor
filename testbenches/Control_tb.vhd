@@ -18,28 +18,41 @@ ARCHITECTURE behavior OF Control_tb  IS
  
     SIGNAL rst : STD_LOGIC := '1'; 
     
-    SIGNAL Instruction : STD_LOGIC_VECTOR(15 downto 0) := X"0000";
     SIGNAL INPUT_SIGNAL : STD_LOGIC_VECTOR(15 downto 0) := X"0000";   
     SIGNAL read_data1 : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL read_data2 : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL ALU_DATA_OUT : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL PC : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL data : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL dataOUT : STD_LOGIC_VECTOR(15 downto 0);   
     SIGNAL read_index1 : STD_LOGIC_VECTOR(2 downto 0);
     SIGNAL read_index2 : STD_LOGIC_VECTOR(2 downto 0);
     SIGNAL data_addr_Out : STD_LOGIC_VECTOR(2 downto 0);  
     SIGNAL wb_select : STD_LOGIC;
+    
+    SIGNAL forwardedoutA : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL forwardedoutB : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL Decode_to_forward_A : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL Decode_to_forward_B : STD_LOGIC_VECTOR(15 downto 0);
     COMPONENT Control
     PORT(
          clk : IN STD_LOGIC;
          rst : IN STD_LOGIC;
-         Instruction : IN STD_LOGIC_VECTOR(15 downto 0);
          INPUT_SIGNAL : IN STD_LOGIC_VECTOR(15 downto 0);
+         PC : out STD_LOGIC_VECTOR(15 downto 0);
+         data : out STD_LOGIC_VECTOR(15 downto 0);
+         ALU_DATA_OUT : out STD_LOGIC_VECTOR(15 downto 0);
          read_data1 : out STD_LOGIC_VECTOR(15 downto 0);
          read_data2 : out STD_LOGIC_VECTOR(15 downto 0);
          read_index1 : out STD_LOGIC_VECTOR(2 downto 0);
          read_index2 : out STD_LOGIC_VECTOR(2 downto 0);
          data_addr_Out : out STD_LOGIC_VECTOR(2 downto 0);
          data_Out : out STD_LOGIC_VECTOR(15 downto 0);
-         wb_select : out STD_LOGIC
+         wb_select : out STD_LOGIC;
+         forwardedoutA : out STD_LOGIC_VECTOR(15 downto 0);
+         forwardedoutB : out STD_LOGIC_VECTOR(15 downto 0);
+         Decode_to_forward_A : out STD_LOGIC_VECTOR(15 downto 0);
+         Decode_to_forward_B : out STD_LOGIC_VECTOR(15 downto 0)
         );
     END COMPONENT;
 
@@ -56,7 +69,9 @@ BEGIN
    uut: Control PORT MAP (
           clk => clk,
           rst => rst,
-          Instruction => Instruction,
+          PC => PC,
+          data => data,
+          ALU_DATA_OUT => ALU_DATA_OUT,
           INPUT_SIGNAL => INPUT_SIGNAL,
           read_data1 => read_data1,
           read_data2 => read_data2,
@@ -64,7 +79,11 @@ BEGIN
           read_index2 => read_index2,
           data_addr_Out => data_addr_Out,
           data_Out =>dataOUT,
-          wb_select => wb_select
+          wb_select => wb_select,
+          forwardedoutA => forwardedoutA,
+          forwardedoutB => forwardedoutB,
+          Decode_to_forward_A => Decode_to_forward_A,
+          Decode_to_forward_B => Decode_to_forward_B
         );
  
     -- Test process
@@ -75,41 +94,7 @@ BEGIN
     rst <= '0';  -- Release reset
     wait for clk_period;  -- Wait for reset to propagate
  
-    -- Store 1 in register 0
-    INPUT_SIGNAL <= X"0001"; -- Immediate value to store
-    Instruction <= "0100001000000000"; -- Store operation for register 0
-    wait for clk_period; -- Wait for the operation to complete
-
-    -- Store 1 in register 1
-    Instruction <= "0100001001000000"; -- Store operation for register 1
-    wait for clk_period; -- Wait for the operation to complete
-    
-    Instruction <= "0000000000000000"; -- NoOp
-    wait for clk_period*3; -- Wait for the operation to complete
-  
-    
-    -- Add register 0 and register 1, store result in register 2
-    Instruction <= "0000001010000001"; -- Add registers 0 and 1
-    wait for clk_period; -- Wait for the operation to complete
-    
-   -- Add result in register 2 with register 0, store back in register 3
-    Instruction <= "0000001011000010"; -- Add registers 2 and 0
-    wait for clk_period; -- Wait for the operation to complete
-    
-     -- multiply result in register 2 with register 2, store back in register 4
-     Instruction <= "0000011100010010"; -- Add registers 2 and 0
-     wait for clk_period; -- Wait for the operation to complete
-    
---     Instruction <= "0000000010000000"; -- NoOp
---     wait for clk_period; -- Wait for the operation to complete
-     
---     Instruction <= "0000000011000000"; -- NoOp
---     wait for clk_period; -- Wait for the operation to complete
-
-
---    Instruction <= "0000001110101000"; -- Assuming an add immediate operation for register
-
---    wait for clk_period; -- Wait for the operation to complete
+    INPUT_SIGNAL <= X"0001";
 
     WAIT; -- Wait forever; the simulation will stop here
 

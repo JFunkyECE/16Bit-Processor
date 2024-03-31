@@ -10,16 +10,24 @@ entity Control is
 
   --inputs
   INPUT_SIGNAL : in STD_LOGIC_VECTOR(15 downto 0);
-  Instruction : in STD_LOGIC_VECTOR(15 downto 0);
 
   --outputs
+  PC : out STD_LOGIC_VECTOR(15 downto 0);
+  data : out STD_LOGIC_VECTOR(15 downto 0);
+  ALU_DATA_OUT : out STD_LOGIC_VECTOR(15 downto 0);
   read_data1 : out STD_LOGIC_VECTOR(15 downto 0); --for debug
   read_data2 : out STD_LOGIC_VECTOR(15 downto 0); --for debug
   read_index1 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
   read_index2 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
   data_addr_Out : out STD_LOGIC_VECTOR(2 downto 0); --for debug
   data_Out : out STD_LOGIC_VECTOR(15 downto 0); --For debug
-  wb_select : out STD_LOGIC
+  wb_select : out STD_LOGIC;
+  
+  forwardedoutA : out STD_LOGIC_VECTOR(15 downto 0);
+  forwardedoutB : out STD_LOGIC_VECTOR(15 downto 0);
+  Decode_to_forward_A : out STD_LOGIC_VECTOR(15 downto 0);
+  Decode_to_forward_B : out STD_LOGIC_VECTOR(15 downto 0)
+  
   );
 
 end Control;
@@ -74,7 +82,13 @@ architecture Behavioral of Control is
     -- Forwarding control signals
     signal Use_Forwarded_Data_EX_IN : STD_LOGIC_VECTOR(1 downto 0) := "00";
     signal Use_Forwarded_Data_WB_IN : STD_LOGIC_VECTOR(1 downto 0) := "00";
-       
+    
+    --signals for fetch stage
+    signal PC_OUT : STD_LOGIC_VECTOR(15 downto 0);
+    signal Instruction_OUT : STD_LOGIC_VECTOR(15 downto 0);
+    signal PC_Updated : STD_LOGIC_VECTOR(15 downto 0);
+    signal IR : STD_LOGIC_VECTOR(15 downto 0);
+    
     
     COMPONENT ALU
         port(
@@ -193,6 +207,26 @@ architecture Behavioral of Control is
 
     end COMPONENT;
 
+    COMPONENT Fetch
+        port(
+            clk : IN std_logic; 
+            reset : IN std_logic;           
+            PC : IN std_logic_vector(15 downto 0); 
+            PC_Updated : OUT std_logic_vector(15 downto 0);             
+            Data_OUT : IN std_logic_vector(15 downto 0);
+            Instruction_Register : OUT std_logic_vector(15 downto 0)        
+        );
+    end COMPONENT;
+    
+    COMPONENT Program_Counter
+        port(
+            clk : IN std_logic;   
+            reset : IN std_logic;
+            PC_IN : IN std_logic_vector(15 downto 0);
+            PC_OUT : OUT std_logic_vector(15 downto 0)
+        );
+    end COMPONENT;
+
     COMPONENT RF8_16
         port(
             rst : in std_logic;
@@ -210,11 +244,20 @@ architecture Behavioral of Control is
             wr_enable: in std_logic);
     end COMPONENT;
 
+   COMPONENT ROM
+        port(
+            clka : in STD_LOGIC;
+            rsta : in STD_LOGIC;
+            addra : in STD_LOGIC_VECTOR(8 downto 0);
+            douta : out STD_LOGIC_VECTOR(15 downto 0)
+    );
+   end COMPONENT;
    
+
 
 begin    
 
-    F_Latch_INST: Fetch_Latch port map(clk=>clk, Instruction => Instruction, F_OpcodeOut => Opcode_F,
+    F_Latch_INST: Fetch_Latch port map(clk=>clk, Instruction => IR, F_OpcodeOut => Opcode_F,
                                        F_R_in1_address_OUT => R_in1_address_F, F_R_in2_address_OUT => R_in2_address_F,
                                        F_R_out_address_OUT => R_out_address_F, F_shift_OUT => shift_F ); 
                                         
@@ -256,7 +299,15 @@ begin
                                   rd_data1 => r1_data , rd_data2 => r2_data , wr_index => WB_R_outaddress_OUT,
                                   wr_data => WB_R_outdata_OUT, wr_enable => WB_EN_OUT);
 
+    Fetch_INST : Fetch port map(clk  => clk, reset => rst, PC => PC_OUT, PC_Updated => PC_Updated, Data_OUT => Instruction_OUT, Instruction_Register => IR);
+    
+    PC_INST : Program_Counter port map(clk => clk, reset => rst, PC_IN => PC_Updated, PC_OUT => PC_OUT);
+    
+    ROM_INST : ROM port map(clka => clk, rsta => rst, addra => PC_OUT(9 downto 1) , douta => Instruction_OUT);
 
+        data <= Instruction_OUT;
+        pc <= PC_OUT;
+        ALU_DATA_OUT <= Data_EX_WB;
         read_data1 <= r1_data;
         read_data2 <= r2_data;
         read_index1 <= R_in1_address_DC_EX;
@@ -264,4 +315,12 @@ begin
         data_addr_Out <= WB_R_outaddress_OUT;
         data_Out <= WB_R_outdata_OUT;
         wb_select <= Select_EX;
+        
+        --checking for data issues
+        forwardedoutA <= Forward_ALU_data1;
+        forwardedoutB <= Forward_ALU_data2;
+        Decode_to_forward_A <= R_data1_DC;
+        Decode_to_forward_B <= R_data2_DC;
+        
+        
 end Behavioral;

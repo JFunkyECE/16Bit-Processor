@@ -35,6 +35,7 @@ begin
             DC_Shift_OUT <= DC_Shift_IN;
             if DC_Opcode_IN = "0000001" or DC_Opcode_IN = "0000010" or DC_Opcode_IN = "0000011" or DC_Opcode_IN = "0000100" or DC_Opcode_IN = "0000101" or DC_Opcode_IN = "0000110" then 
                 DC_Write_Enable_OUT <= '1';
+                DC_WB_Select <= '0';
             elsif DC_Opcode_IN = "0100001" then
                 DC_WB_Select <= '1';
                 DC_Write_Enable_OUT <= '1';
