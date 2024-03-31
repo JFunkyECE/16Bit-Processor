@@ -89,6 +89,14 @@ architecture Behavioral of Control is
     signal PC_Updated : STD_LOGIC_VECTOR(15 downto 0);
     signal IR : STD_LOGIC_VECTOR(15 downto 0);
     
+    --RAM signals
+    signal wea_RAM : STD_LOGIC_VECTOR(0 downto 0);
+    signal addra_RAM : STD_LOGIC_VECTOR(8 downto 0);
+    signal dina_RAM : STD_LOGIC_VECTOR(15 downto 0);
+    signal douta_RAM : STD_LOGIC_VECTOR(15 downto 0);
+    signal addrb_RAM : STD_LOGIC_VECTOR(8 downto 0);
+    signal doutb_RAM : STD_LOGIC_VECTOR(15 downto 0);
+    
     
     COMPONENT ALU
         port(
@@ -246,12 +254,28 @@ architecture Behavioral of Control is
 
    COMPONENT ROM
         port(
-            clka : in STD_LOGIC;
-            rsta : in STD_LOGIC;
-            addra : in STD_LOGIC_VECTOR(8 downto 0);
-            douta : out STD_LOGIC_VECTOR(15 downto 0)
+            clka_ROM : in STD_LOGIC;
+            rsta_ROM : in STD_LOGIC;
+            addra_ROM : in STD_LOGIC_VECTOR(8 downto 0);
+            douta_ROM : out STD_LOGIC_VECTOR(15 downto 0)
     );
    end COMPONENT;
+   
+   COMPONENT RAM
+           port(
+               clka_RAM : IN STD_LOGIC;
+               rsta_RAM : IN STD_LOGIC;
+               wea_RAM : IN STD_LOGIC_VECTOR(0 downto 0);      
+               addra_RAM : IN STD_LOGIC_VECTOR(8 downto 0);
+               dina_RAM  : IN STD_LOGIC_VECTOR(15 downto 0);
+               douta_RAM : OUT STD_LOGIC_VECTOR(15 downto 0);
+                 -- Port B module ports
+               rstb_RAM : IN STD_LOGIC;
+               addrb_RAM : IN STD_LOGIC_VECTOR(8 downto 0);
+               doutb_RAM : OUT STD_LOGIC_VECTOR(15 downto 0)
+           
+    );
+    end COMPONENT;
    
 
 
@@ -303,7 +327,11 @@ begin
     
     PC_INST : Program_Counter port map(clk => clk, reset => rst, PC_IN => PC_Updated, PC_OUT => PC_OUT);
     
-    ROM_INST : ROM port map(clka => clk, rsta => rst, addra => PC_OUT(9 downto 1) , douta => Instruction_OUT);
+    ROM_INST : ROM port map(clka_ROM => clk, rsta_ROM => rst, addra_ROM => PC_OUT(9 downto 1) , douta_ROM => Instruction_OUT);
+    
+    RAM_INST : RAM port map(clka_RAM => clk, wea_RAM => wea_RAM , addra_RAM => addra_RAM,
+                            dina_RAM => dina_RAM, douta_RAM => douta_RAM, rstb_RAM => rst, addrb_RAM => addrb_RAM,
+                            doutb_RAM => doutb_RAM, rsta_RAM => rst);
 
         data <= Instruction_OUT;
         pc <= PC_OUT;

@@ -8,10 +8,10 @@ use xpm.vcomponents.all;
 -- Define the ROM entity with its interface
 entity rom is
     Port (
-        clka : in STD_LOGIC;
-        rsta : in STD_LOGIC;
-        addra : in STD_LOGIC_VECTOR(8 downto 0);
-        douta : out STD_LOGIC_VECTOR(15 downto 0));
+        clka_ROM : in STD_LOGIC;
+        rsta_ROM : in STD_LOGIC;
+        addra_ROM : in STD_LOGIC_VECTOR(8 downto 0);
+        douta_ROM : out STD_LOGIC_VECTOR(15 downto 0));
 end rom;
 
 -- Implementation of the ROM using an architecture
@@ -45,14 +45,14 @@ xpm_memory_sprom_inst : xpm_memory_sprom
     -- Common module ports
     sleep                   => '0',
     -- Port A module ports
-    clka                    => clka,
-    rsta                    => rsta,
+    clka                    => clka_ROM,
+    rsta                    => rsta_ROM,
     ena                     => '1',
     regcea                  => '1',
-    addra                   => addra,
+    addra                   => addra_ROM,
     injectsbiterra          => '0',   --do not change
     injectdbiterra          => '0',   --do not change
-    douta                   => douta,
+    douta                   => douta_ROM,
     sbiterra                => open,  --do not change
     dbiterra                => open   --do not change
   );
