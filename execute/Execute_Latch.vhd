@@ -12,7 +12,7 @@ entity Execute_Latch is
     EX_NegativeZero_IN : in STD_LOGIC_VECTOR(1 downto 0);
     EX_opcodeIn : in STD_LOGIC_VECTOR(6 downto 0);
     EX_ALU_data_IN : in STD_LOGIC_VECTOR(15 downto 0);
-    EX_R_out_address_IN : in STD_LOGIC_VECTOR(2 downto 0); 
+    EX_R_out_address_IN : in STD_LOGIC_VECTOR(2 downto 0);
     
     --new signals for branch
     EX_Branch_Select_IN : in STD_LOGIC;
@@ -27,7 +27,7 @@ entity Execute_Latch is
     EX_NegativeZero_OUT : out STD_LOGIC_VECTOR(1 downto 0);
     EX_opcodeOut : out STD_LOGIC_VECTOR(6 downto 0);
     EX_R_out_data_OUT : out STD_LOGIC_VECTOR(15 downto 0);
-    EX_R_out_address_OUT : out  STD_LOGIC_VECTOR(2 downto 0)  
+    EX_R_out_address_OUT : out  STD_LOGIC_VECTOR(2 downto 0) 
   );
 end Execute_Latch;
 
@@ -44,7 +44,7 @@ begin
                 EX_R_out_address_OUT <= EX_R_out_address_IN;
                 EX_NegativeZero_OUT <= EX_NegativeZero_IN;
                 EX_opcodeOut <= EX_opcodeIn;     
-                EX_PC_OUT <= std_logic_vector( signed(EX_PC_IN) + to_signed(2,16));
+                EX_PC_OUT <= std_logic_vector(signed(EX_PC_IN) + to_signed(2,16));
                 EX_Branch_Select_OUT <= EX_Branch_Select_IN;
             end if;
     end process;
