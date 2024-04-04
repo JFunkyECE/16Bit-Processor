@@ -8,6 +8,12 @@ entity Fetch_Latch is
       --inputs
       Instruction : IN STD_LOGIC_VECTOR(15 downto 0);
       
+      --new signals for branch
+      PC_IN : IN STD_LOGIC_VECTOR(15 downto 0);
+      F_displacementl: out STD_LOGIC_VECTOR(8 downto 0);
+      F_displacements : out STD_LOGIC_VECTOR(5 downto 0);
+      F_PC : out STD_LOGIC_VECTOR(15 downto 0);
+      
       --outputs
       F_OpcodeOut : out STD_LOGIC_VECTOR(6 downto 0);
       F_R_in1_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
@@ -28,7 +34,10 @@ begin
                 F_R_in1_address_OUT <= Instruction(5 downto 3);
                 F_R_in2_address_OUT <= Instruction(2 downto 0);
                 F_R_out_address_OUT <= Instruction(8 downto 6);
-                F_shift_OUT <= Instruction(3 downto 0);            
+                F_shift_OUT <= Instruction(3 downto 0);
+                F_PC <= PC_IN;
+                F_displacementl <= Instruction(8 downto 0);
+                F_displacements <= Instruction(5 downto 0);            
             end if;
             end process;
 

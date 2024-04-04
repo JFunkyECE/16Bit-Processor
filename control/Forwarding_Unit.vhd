@@ -15,6 +15,11 @@ entity Forwarding_Unit is
     Forward_DC_Write_Enable_IN : in STD_LOGIC;
     Forward_EX_Write_Enable_IN : in STD_LOGIC;
     Forward_WB_Enable_IN : in STD_LOGIC;
+    
+    --new signals for branch instructions
+    Opcode : in STD_LOGIC_VECTOR(6 downto 0);
+    PC : in STD_LOGIC_VECTOR(15 downto 0);
+    Displacement : in STD_LOGIC_VECTOR(15 downto 0);
     --outputs
     data_A_OUT : out STD_LOGIC_VECTOR(15 downto 0);
     data_B_OUT : out STD_LOGIC_VECTOR(15 downto 0)    
@@ -24,7 +29,7 @@ end Forwarding_Unit;
 architecture Behavioral of Forwarding_Unit is
 begin
     -- Forwarding logic
-    process(Forward_DC_Write_Enable_IN, Forward_EX_Write_Enable_IN, Forward_WB_Enable_IN, Forward_EX_Rout_IN, Forward_DC_Rin1_IN, Forward_DC_Rin2_IN, Forward_EX_IN, Forward_DC_data1_IN, Forward_DC_data2_IN, Forward_WB_Rout_IN, Forward_WB_IN)
+    process(Opcode, PC, Displacement, Forward_DC_Write_Enable_IN, Forward_EX_Write_Enable_IN, Forward_WB_Enable_IN, Forward_EX_Rout_IN, Forward_DC_Rin1_IN, Forward_DC_Rin2_IN, Forward_EX_IN, Forward_DC_data1_IN, Forward_DC_data2_IN, Forward_WB_Rout_IN, Forward_WB_IN)
     begin
         -- Check forwarding condition for Data1
         if (Forward_EX_Rout_IN = Forward_DC_Rin1_IN and Forward_EX_Write_Enable_IN = '1') then
@@ -42,7 +47,18 @@ begin
             data_B_OUT <= Forward_WB_IN;
         else
             data_B_OUT <= Forward_DC_data2_IN;
-        end if;          
+        end if;
+        
+        --for the start or branching only inlcudings 64,65,66 for displacement L
+        if Opcode = "1000000" or Opcode = "1000001" or Opcode = "1000010" then
+            data_A_OUT <= PC;
+            data_B_OUT <= Displacement;
+        end if;
+        -- branching for 67,68,69,70
+        if Opcode = "1000011" or Opcode = "1000100" or Opcode = "1000101" or Opcode = "1000110" then
+            data_B_OUT <= Displacement;
+        end if;
+                  
     end process;
 end Behavioral;
 

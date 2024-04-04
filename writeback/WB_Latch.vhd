@@ -12,6 +12,11 @@ entity Writeback_latch is
   WB_Enable_IN : in STD_LOGIC;
   WB_Select_IN : in STD_LOGIC;
   
+  -- for branching
+  WB_PC2 : in STD_LOGIC_VECTOR(15 downto 0);
+  WB_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
+  WB_Opcode_OUT : out STD_LOGIC_VECTOR(6 downto 0);
+  
  --temporary ports
  INPORT : IN STD_LOGIC_VECTOR(15 downto 0);
   
@@ -27,13 +32,20 @@ begin
     process(clk)
     begin
         if rising_edge(clk) then --Data is always set on the rising edge of the clock
-            if   WB_Select_IN = '1' then
-                WB_R_out_data_OUT <= INPORT;          
+            WB_Opcode_OUT <= WB_Opcode_IN;
+            if WB_Opcode_IN = "1000110" then --br.sub, writes pc+2 into r7
+                        WB_R_out_data_OUT <= WB_PC2;
+                        WB_R_out_address_OUT <= "111";
+                        WB_Enable_OUT <= '1';
             else
-                WB_R_out_data_OUT <= WB_R_out_data_IN;
+                if   WB_Select_IN = '1' then
+                    WB_R_out_data_OUT <= INPORT;          
+                else
+                    WB_R_out_data_OUT <= WB_R_out_data_IN;
+                end if;
+                WB_R_out_address_OUT <= WB_R_out_address_IN;
+                WB_Enable_OUT <= WB_Enable_IN;          
             end if;
-            WB_R_out_address_OUT <= WB_R_out_address_IN;
-            WB_Enable_OUT <= WB_Enable_IN;            
         end if;
         end process;
 

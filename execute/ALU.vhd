@@ -121,6 +121,27 @@ begin
                     else
                         Zero_Negative_flags(1) <= '0';
                     end if;
+                when "1000000" =>  -- OpCode = 64 for branch
+                    result_signed := add1(a_signed, b_signed);
+                    mux_out := std_logic_vector(result_signed);
+                when "1000001" =>  -- OpCode = 65 for branch
+                    result_signed := add1(a_signed, b_signed);
+                    mux_out := std_logic_vector(result_signed);
+                when "1000010" =>  -- OpCode = 66 for branch
+                    result_signed := add1(a_signed, b_signed);
+                    mux_out := std_logic_vector(result_signed);
+                when "1000011" =>  -- OpCode = 67 for branch
+                    result_signed := add1(a_signed, b_signed);
+                    mux_out := std_logic_vector(result_signed);
+                when "1000100" =>  -- OpCode = 68 for branch
+                    result_signed := add1(a_signed, b_signed);
+                    mux_out := std_logic_vector(result_signed);
+                when "1000101" =>  -- OpCode = 69 for branch
+                    result_signed := add1(a_signed, b_signed);
+                    mux_out := std_logic_vector(result_signed);
+                when "1000110" =>  -- OpCode = 70 for subroutine branch
+                    result_signed := add1(a_signed, b_signed);
+                    mux_out := std_logic_vector(result_signed);    
                 when others =>
                     mux_out := (others => '0'); -- Default case
              end case;

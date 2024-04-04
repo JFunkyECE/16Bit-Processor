@@ -14,7 +14,13 @@ entity Decode_Latch is
     DC_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
     DC_Shift_IN : in STD_LOGIC_VECTOR(3 downto 0);
     
-   
+    --new signals
+    DC_Displacement_IN : in STD_LOGIC_VECTOR(15 downto 0);
+    DC_PC_IN : in STD_LOGIC_VECTOR(15 downto 0);
+    DC_Displacement_OUT : out STD_LOGIC_VECTOR(15 downto 0);
+    DC_PC_OUT : out STD_LOGIC_VECTOR(15 downto 0);
+    
+    
     --outputs
     DC_R_data1_OUT : out STD_LOGIC_VECTOR(15 downto 0);
     DC_R_data2_OUT : out STD_LOGIC_VECTOR(15 downto 0);
@@ -46,6 +52,8 @@ begin
             DC_Opcode_OUT <= DC_Opcode_IN;
             DC_Shift_OUT <= DC_Shift_IN;
             
+            DC_Displacement_OUT <= DC_Displacement_IN;
+            DC_PC_OUT <= DC_PC_IN;
             
             if DC_Opcode_IN = "0000001" or DC_Opcode_IN = "0000010" or DC_Opcode_IN = "0000011" or DC_Opcode_IN = "0000100" or DC_Opcode_IN = "0000101" or DC_Opcode_IN = "0000110" then
                 DC_Write_Enable_OUT <= '1';
