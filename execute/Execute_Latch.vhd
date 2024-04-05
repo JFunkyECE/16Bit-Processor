@@ -44,7 +44,6 @@ begin
         begin
             if rising_edge(clk) then --Data is always set on the rising edge of the clock
                 EX_R_out_data_OUT <= EX_ALU_data_IN;
-                EX_write_enable_OUT <= EX_write_enable_IN;
                 EX_select_OUT <= EX_select_IN;
                 EX_R_out_address_OUT <= EX_R_out_address_IN;
                 EX_NegativeZero_OUT <= EX_NegativeZero_IN;
@@ -54,6 +53,11 @@ begin
                 EX_DESTINATION_OUT <= EX_DESTINATION_IN;
                 EX_SOURCE_OUT <= EX_SOURCE_IN;
                 
+                if EX_Branch_Select_IN = '1' then
+                    EX_write_enable_OUT <= '0';
+                else
+                    EX_write_enable_OUT <= EX_write_enable_IN;
+                end if;
                 --
 --                if EX_opcodeIn = "0010010" then
 --                    EX_R_out_address_OUT <= "111";

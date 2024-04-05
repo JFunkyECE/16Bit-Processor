@@ -1,10 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- in the case of opcodes 67 to 70 the branch needs to calcluate the new address 
--- with Ra, so need to read that data in from the register file
-
--- this connects between the fetch latch and the register file input address port
 
 entity Register_Select is
   Port ( 

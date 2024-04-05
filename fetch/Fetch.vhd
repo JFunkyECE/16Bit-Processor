@@ -2,10 +2,6 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
---still need to add logic for bubbling pc and not incrementing
--- just follow diagram made
-
-
 entity Fetch is
   Port ( 
     clk : IN std_logic;

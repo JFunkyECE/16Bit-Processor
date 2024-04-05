@@ -11,7 +11,8 @@ entity Branch_Select is
         Opcode : in std_logic_vector(6 downto 0);
         ZN_Flags : in std_logic_vector(1 downto 0);
   
-        BR_Select: out std_logic
+        BR_Select: out std_logic;
+        BR_Return_Clear : out std_logic
   );
 end Branch_Select;
 
@@ -41,6 +42,11 @@ begin
             end if;
         else
             BR_Select <= '0';
+        end if;
+        if Opcode = "1000111" then -- if subrountine return call, clear decode only
+            BR_Return_Clear <= '1';
+        else
+            BR_Return_Clear <= '0';
         end if;
     end process;
 

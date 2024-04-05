@@ -222,8 +222,7 @@ architecture Behavioral of Control is
         port(
             clk : in STD_LOGIC;
             branch_taken : in STD_LOGIC;
-            branch_return: out STD_LOGIC;
-
+            stage_clear : in STD_LOGIC;
             --inputs
             DC_R_data1_IN : in STD_LOGIC_VECTOR(15 downto 0);
             DC_R_data2_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -274,7 +273,8 @@ architecture Behavioral of Control is
             rst : in std_logic;
             Opcode : in std_logic_vector(6 downto 0);
             ZN_Flags : in std_logic_vector(1 downto 0);
-            BR_Select: out std_logic
+            BR_Select: out std_logic;
+            BR_Return_Clear : out std_logic
         );
     end COMPONENT;
 
@@ -320,8 +320,6 @@ architecture Behavioral of Control is
     COMPONENT Fetch_Latch
         port(
             clk : in STD_LOGIC;           
-            branch_taken : in STD_LOGIC;
-            branch_return: in STD_LOGIC;
 
             --inputs
             Instruction : IN STD_LOGIC_VECTOR(15 downto 0);      
@@ -353,10 +351,9 @@ architecture Behavioral of Control is
             PC_Updated : OUT std_logic_vector(15 downto 0);             
             Data_OUT : IN std_logic_vector(15 downto 0);
             Instruction_Register : OUT std_logic_vector(15 downto 0);
-            
-            --new signals for branching
             branch_select : IN std_logic;
-            branch_PC : IN std_logic_vector(15 downto 0)     
+            branch_PC : IN std_logic_vector(15 downto 0)
+     
         );
     end COMPONENT;
     
@@ -435,7 +432,7 @@ begin
                                        F_R_in1_address_OUT => R_in1_address_F, F_R_in2_address_OUT => R_in2_address_F,
                                        F_R_out_address_OUT => R_out_address_F, F_shift_OUT => shift_F,
                                        PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC,
-                                       F_IMM => F_DC_IMM, F_M1=> F_DC_M1, branch_taken => branch_sel, branch_return => b_return); 
+                                       F_IMM => F_DC_IMM, F_M1=> F_DC_M1 ); 
                                         
 
     DC_Latch_INST : Decode_Latch port map (clk=>clk, DC_R_data1_IN => r1_data, DC_R_data2_IN => r2_data,
@@ -448,7 +445,7 @@ begin
                                             DC_Write_Enable_OUT => WR_Enable_DC, DC_Opcode_OUT => Opcode_DC, DC_Shift_OUT  => Shift_DC,
                                             DC_WB_Select => Select_DC, DC_Displacement_IN => F_Displacement, DC_Displacement_OUT => Displacement_DC_EX, 
                                             DC_PC_IN => Fetch_PC, DC_PC_OUT =>PC_DC_EX, D_M1=> F_DC_M1,  D_IMM => F_DC_IMM, 
-                                            D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel, branch_return => b_return );
+                                            D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel, stage_clear => b_return);
                                             
 
     Forwarding_Unit_INST : Forwarding_Unit port map(Forward_EX_IN => Data_EX_WB, Forward_WB_IN => WB_R_outdata_OUT, Forward_DC_data1_IN => R_data1_DC,
@@ -484,7 +481,7 @@ begin
                                   wr_data => WB_R_outdata_OUT, wr_enable => WB_EN_OUT);
 
     Fetch_INST : Fetch port map(clk  => clk, reset => rst, PC => PC_OUT, PC_Updated => PC_Updated, Data_OUT => Instruction_OUT, Instruction_Register => IR,
-                                branch_select => branch_sel, branch_PC => Data_EX_WB );
+                                branch_select => branch_sel, branch_PC => Data_EX_WB);
     
     PC_INST : Program_Counter port map(clk => clk, reset => rst, PC_IN => PC_Updated, PC_OUT => PC_OUT, DC_Opcode => Opcode_DC, DC_R7 => R_data1_DC);
     
@@ -500,7 +497,7 @@ begin
     REG_SEL_INST : Register_Select port map(rst => rst, R_IN_1 => R_in1_address_F , R_IN_2 => R_in2_address_F ,R_dest => R_out_address_F, Opcode => Opcode_F ,R1_OUT =>R_Select1,
                                             R2_OUT => R_Select2);
     
-    BR_SEL_INST : Branch_Select port map(rst => rst, Opcode => OpCode_DC, ZN_Flags => Zero_Negative, BR_Select => Branch_Sel_EX ); 
+    BR_SEL_INST : Branch_Select port map(rst => rst, Opcode => OpCode_DC, ZN_Flags => Zero_Negative, BR_Select => Branch_Sel_EX, BR_Return_Clear => b_return ); 
 
     RAM_CTRL_INST : RAM_Control port map(rst => rst, Opcode => Opcode_EX_WB, source_in => source_data_RAM , destination_in => destination_data_RAM , write_enable_ram => wea_RAM, 
                                          addr_in_ram => addra_RAM,data_in_ram => dina_RAM );
