@@ -5,6 +5,7 @@ entity Decode_Latch is
   Port (
     clk : in STD_LOGIC;
     branch_taken : in STD_LOGIC;
+    branch_return: out STD_LOGIC;
     --inputs
     DC_R_data1_IN : in STD_LOGIC_VECTOR(15 downto 0);
     DC_R_data2_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -46,7 +47,7 @@ architecture Behavioral of Decode_Latch is
 
 begin
     
-    process(clk, branch_taken)
+    process(clk)
     begin
         if rising_edge(clk) or branch_taken = '1' then
             if branch_taken = '1' then
@@ -97,6 +98,11 @@ begin
                     DC_Write_Enable_OUT <= '0';
                     DC_WB_Select <= '0';
                 end if;
+            end if;
+            if DC_Opcode_IN = "1000111" then
+                branch_return <= '1';
+            else
+                branch_return <= '0';
             end if;   
         end if;
         end process;

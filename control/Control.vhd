@@ -139,6 +139,8 @@ architecture Behavioral of Control is
     signal DC_EX_IMM : STD_LOGIC_VECTOR(7 downto 0);
     signal DC_EX_M1 : STD_LOGIC;
     
+    signal b_return : STD_LOGIC;
+    
     COMPONENT ALU
         port(
             --clk : in STD_LOGIC;
@@ -220,6 +222,7 @@ architecture Behavioral of Control is
         port(
             clk : in STD_LOGIC;
             branch_taken : in STD_LOGIC;
+            branch_return: out STD_LOGIC;
 
             --inputs
             DC_R_data1_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -318,6 +321,7 @@ architecture Behavioral of Control is
         port(
             clk : in STD_LOGIC;           
             branch_taken : in STD_LOGIC;
+            branch_return: in STD_LOGIC;
 
             --inputs
             Instruction : IN STD_LOGIC_VECTOR(15 downto 0);      
@@ -431,7 +435,7 @@ begin
                                        F_R_in1_address_OUT => R_in1_address_F, F_R_in2_address_OUT => R_in2_address_F,
                                        F_R_out_address_OUT => R_out_address_F, F_shift_OUT => shift_F,
                                        PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC,
-                                       F_IMM => F_DC_IMM, F_M1=> F_DC_M1, branch_taken => branch_sel); 
+                                       F_IMM => F_DC_IMM, F_M1=> F_DC_M1, branch_taken => branch_sel, branch_return => b_return); 
                                         
 
     DC_Latch_INST : Decode_Latch port map (clk=>clk, DC_R_data1_IN => r1_data, DC_R_data2_IN => r2_data,
@@ -444,7 +448,7 @@ begin
                                             DC_Write_Enable_OUT => WR_Enable_DC, DC_Opcode_OUT => Opcode_DC, DC_Shift_OUT  => Shift_DC,
                                             DC_WB_Select => Select_DC, DC_Displacement_IN => F_Displacement, DC_Displacement_OUT => Displacement_DC_EX, 
                                             DC_PC_IN => Fetch_PC, DC_PC_OUT =>PC_DC_EX, D_M1=> F_DC_M1,  D_IMM => F_DC_IMM, 
-                                            D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel );
+                                            D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel, branch_return => b_return );
                                             
 
     Forwarding_Unit_INST : Forwarding_Unit port map(Forward_EX_IN => Data_EX_WB, Forward_WB_IN => WB_R_outdata_OUT, Forward_DC_data1_IN => R_data1_DC,

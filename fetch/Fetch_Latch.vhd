@@ -5,6 +5,7 @@ entity Fetch_Latch is
   Port ( 
       clk : in STD_LOGIC;
       branch_taken : in STD_LOGIC;
+      branch_return : in STD_LOGIC;
       --inputs
       Instruction : IN STD_LOGIC_VECTOR(15 downto 0);
       
@@ -33,8 +34,8 @@ architecture Behavioral of Fetch_Latch is
 begin
     process(clk)
         begin
-            if rising_edge(clk) then --Data is always set on the rising edge of the clock
-                if branch_taken = '1' then
+            if rising_edge(clk) or branch_return = '1' then --Data is always set on the rising edge of the clock
+                if branch_taken = '1' or branch_return = '1' then
                     F_OpcodeOut <= "0000000";
                     F_R_in1_address_OUT <= Instruction(5 downto 3);
                     F_R_in2_address_OUT <= Instruction(2 downto 0);
