@@ -301,6 +301,8 @@ architecture Behavioral of Control is
             DC_EX_MEM_READ_EN_IN : in STD_LOGIC := '0';
             F_DC_R1_addr_IN : in STD_LOGIC_VECTOR(2 downto 0);
             F_DC_R2_addr_IN : in STD_LOGIC_VECTOR(2 downto 0);
+            F_DC_OPCODE_IN : in STD_LOGIC_VECTOR(6 downto 0);
+            DC_EX_OPCODE_IN : in STD_LOGIC_VECTOR(6 downto 0);
             
             --outputs
             STALL_OUT : out STD_LOGIC;
@@ -408,7 +410,7 @@ begin
                                        PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC); 
                                        
    Hazard_Unit_INST : Hazard_Unit port map(rst => rst, DC_EX_R2_addr_IN => R_in2_address_DC_EX, DC_EX_MEM_READ_EN_IN => MEM_READ_DC, F_DC_R1_addr_IN => R_in1_address_F, 
-                                            F_DC_R2_addr_IN => R_in2_address_F, 
+                                            F_DC_R2_addr_IN => R_in2_address_F, F_DC_OPCODE_IN => Opcode_F, DC_EX_OPCODE_IN => Opcode_DC,
                                             STALL_OUT => STALL_OUT, PC_WRITE_OUT => PC_WRITE_OUT);
                                         
 

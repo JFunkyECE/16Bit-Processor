@@ -72,13 +72,13 @@ begin
                     DC_MEM_READ_OUT <= '0';
                 end if;
             else
-                DC_R_data1_OUT <= DC_R_data1_IN;
-                DC_R_data2_OUT <= DC_R_data2_IN;
-                DC_EX_addr1_OUT <= DC_R_addr1_IN;
-                DC_EX_addr2_OUT <= DC_R_addr2_IN;
-                DC_R_out_address_OUT <= DC_R_out_address_IN;   
-                DC_Opcode_OUT <= DC_Opcode_IN;
-                DC_Shift_OUT <= DC_Shift_IN;
+--                DC_R_data1_OUT <= DC_R_data1_IN;
+--                DC_R_data2_OUT <= DC_R_data2_IN;
+--                DC_EX_addr1_OUT <= DC_R_addr1_IN;
+--                DC_EX_addr2_OUT <= DC_R_addr2_IN;
+--                DC_R_out_address_OUT <= DC_R_out_address_IN;   
+--                DC_Opcode_OUT <= DC_Opcode_IN;
+--                DC_Shift_OUT <= DC_Shift_IN;
                 DC_Write_Enable_OUT <= '0';
                 DC_WB_Select <= '0';
                 DC_MEM_READ_OUT <= '0';
