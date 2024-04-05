@@ -11,7 +11,12 @@ entity ALU is
         A : in STD_LOGIC_VECTOR(15 downto 0); --always a register value
         B : in STD_LOGIC_VECTOR(15 downto 0); --could be a register value or an immediate
         OpCode : in STD_LOGIC_VECTOR(6 downto 0); --used to determine which operation is occuring
-        Shift_value : in STD_LOGIC_VECTOR(3 downto 0); --Stores immediate for shifting
+        Shift_value : in STD_LOGIC_VECTOR(3 downto 0); --Stores immediate for shifting\
+        
+        --for load immediate
+        M_EX : in STD_LOGIC;
+        IMM_EX : in STD_LOGIC_VECTOR(7 downto 0);
+        
         C : out STD_LOGIC_VECTOR(15 downto 0); --stores output, CHANGE TO 32 bits
 
         Zero_Negative_flags : out STD_LOGIC_VECTOR(1 downto 0) -- lsb is negative, msb is zero
@@ -72,7 +77,7 @@ begin
     );
        
     -- ALU operation process
-    alu_operation: process(A, B, OpCode, Shift_value, Shift_Result_Left, Shift_Result_Right, wallace_prod) --any changes to A, B, or Opcode will cause code to execute
+    alu_operation: process(A, B, OpCode, Shift_value, Shift_Result_Left, Shift_Result_Right, wallace_prod, M_EX, IMM_EX) --any changes to A, B, or Opcode will cause code to execute
    
         variable a_signed, b_signed: signed(15 downto 0); --two input operands
         variable result_signed: signed(15 downto 0);     --output of alu operation
@@ -141,7 +146,17 @@ begin
                     mux_out := std_logic_vector(result_signed);
                 when "1000110" =>  -- OpCode = 70 for subroutine branch
                     result_signed := add1(a_signed, b_signed);
-                    mux_out := std_logic_vector(result_signed);    
+                    mux_out := std_logic_vector(result_signed); 
+                when "0010000" =>   -- Opcode = 16 for load instruction
+                    mux_out := std_logic_vector(A); 
+                when "0010010" => -- Opcode = 18 loadimmediate instruction
+                    if M_EX = '0' then
+                        mux_out := A(15 downto 8) & IMM_EX;
+                    else
+                        mux_out := IMM_EX & A(7 downto 0);
+                    end if;
+                when "0010011" => -- Opcode = 19 MOV
+                    mux_out := A;
                 when others =>
                     mux_out := (others => '0'); -- Default case
              end case;

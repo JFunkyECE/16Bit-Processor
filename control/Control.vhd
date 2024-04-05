@@ -54,13 +54,6 @@ architecture Behavioral of Control is
     --signals for Forwarding_Unit
     signal Forward_ALU_data1 : STD_LOGIC_VECTOR (15 downto 0);
     signal Forward_ALU_data2 : STD_LOGIC_VECTOR (15 downto 0);
-    
-    --signals for Hazard Unit
-    signal STALL_OUT : STD_LOGIC;
-    signal PC_WRITE_OUT : STD_LOGIC;
-    signal WR_ENABLE_OUT : STD_LOGIC;
-    signal HU_WB_LOAD_COMPLETE_OUT : STD_LOGIC;
-    
 
     --signals for dc
     signal WR_Enable_DC : STD_LOGIC;
@@ -72,8 +65,6 @@ architecture Behavioral of Control is
     signal Opcode_DC : STD_LOGIC_VECTOR (6 downto 0);
     signal Shift_DC : STD_LOGIC_VECTOR (3 downto 0);
     signal Select_DC : STD_LOGIC;
-    signal MEM_READ_DC : STD_LOGIC;
-    signal DC_EX_Load_Complete_OUT : STD_LOGIC;
  
     --signals for ALU
     signal R_data_ALU_OUT : STD_LOGIC_VECTOR (15 downto 0);
@@ -86,13 +77,11 @@ architecture Behavioral of Control is
     signal Data_Addr_EX_WB : STD_LOGIC_VECTOR (2 downto 0);
     signal NZ : STD_LOGIC_VECTOR(1 downto 0);
     signal Select_EX : STD_LOGIC;
-    signal EX_WB_Load_Complete_OUT : STD_LOGIC;
  
     --signals for wb
     signal WB_EN_OUT : STD_LOGIC;
     signal WB_R_outdata_OUT : STD_LOGIC_VECTOR(15 downto 0);
     signal WB_R_outaddress_OUT : STD_LOGIC_VECTOR(2 downto 0);
-    signal WB_HU_LOAD_COMPLETE_OUT : STD_LOGIC;
    
     --signals for register file
     signal r1_data : STD_LOGIC_VECTOR(15 downto 0);
@@ -122,11 +111,12 @@ architecture Behavioral of Control is
     signal displacementL : STD_LOGIC_VECTOR(8 downto 0);
     signal displacementS : STD_LOGIC_VECTOR(5 downto 0);
     signal Fetch_PC : STD_LOGIC_VECTOR(15 downto 0);
+   
     
     --decode stage to decode latch
     signal F_Displacement : STD_LOGIC_VECTOR(15 downto 0);
-    signal R_Select : STD_LOGIC_VECTOR(2 downto 0);
-    
+    signal R_Select1 : STD_LOGIC_VECTOR(2 downto 0);
+    signal R_Select2 : STD_LOGIC_VECTOR(2 downto 0);
     --decode latch to ex
     signal Displacement_DC_EX : STD_LOGIC_VECTOR(15 downto 0);
     signal PC_DC_EX : STD_LOGIC_VECTOR(15 downto 0);
@@ -139,6 +129,15 @@ architecture Behavioral of Control is
     signal EX_WB_PC : STD_LOGIC_VECTOR(15 downto 0);
     signal WB_OP_OUT : STD_LOGIC_VECTOR(6 downto 0);
     
+    --signals for ex latch to ram control
+    signal destination_data_RAM : STD_LOGIC_VECTOR(15 downto 0);
+    signal source_data_RAM : STD_LOGIC_VECTOR(15 downto 0);
+    
+    --signals for load immediate
+    signal F_DC_IMM : STD_LOGIC_VECTOR(7 downto 0);
+    signal F_DC_M1 : STD_LOGIC;
+    signal DC_EX_IMM : STD_LOGIC_VECTOR(7 downto 0);
+    signal DC_EX_M1 : STD_LOGIC;
     
     COMPONENT ALU
         port(
@@ -148,6 +147,12 @@ architecture Behavioral of Control is
             OpCode : in STD_LOGIC_VECTOR(6 downto 0);
             Shift_value : in STD_LOGIC_VECTOR(3 downto 0);
             C : out STD_LOGIC_VECTOR(15 downto 0);
+            
+            --for load immediate
+            M_EX : in STD_LOGIC;
+            IMM_EX : in STD_LOGIC_VECTOR(7 downto 0);
+            
+            
             Zero_Negative_flags : out STD_LOGIC_VECTOR(1 downto 0)
         );
     end COMPONENT;
@@ -167,7 +172,8 @@ architecture Behavioral of Control is
             WB_PC2 : in STD_LOGIC_VECTOR(15 downto 0);
             WB_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
             WB_Opcode_OUT : out STD_LOGIC_VECTOR(6 downto 0);
-            
+            -- for load
+            WB_LOAD_DATA : in STD_LOGIC_VECTOR(15 downto 0);
             --outputs
             WB_R_out_data_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             WB_R_out_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
@@ -196,6 +202,11 @@ architecture Behavioral of Control is
             EX_R_out_data_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             EX_R_out_address_OUT : out  STD_LOGIC_VECTOR(2 downto 0);
             
+            --signals for load store
+            EX_SOURCE_IN : in STD_LOGIC_VECTOR(15 downto 0);
+            EX_DESTINATION_IN : in STD_LOGIC_VECTOR(15 downto 0);
+            EX_SOURCE_OUT : out STD_LOGIC_VECTOR(15 downto 0);
+            EX_DESTINATION_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             --new signals for branch
             EX_Branch_Select_IN : in STD_LOGIC;
             EX_Branch_Select_OUT : out STD_LOGIC;
@@ -208,6 +219,7 @@ architecture Behavioral of Control is
     COMPONENT Decode_Latch
         port(
             clk : in STD_LOGIC;
+            branch_taken : in STD_LOGIC;
 
             --inputs
             DC_R_data1_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -217,7 +229,6 @@ architecture Behavioral of Control is
             DC_R_out_address_IN : in STD_LOGIC_VECTOR(2 downto 0);
             DC_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
             DC_Shift_IN : in STD_LOGIC_VECTOR(3 downto 0);
-            STALL_IN : in STD_LOGIC;
               
               --outputs
             DC_R_data1_OUT : out STD_LOGIC_VECTOR(15 downto 0);
@@ -227,9 +238,14 @@ architecture Behavioral of Control is
             DC_R_out_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
             DC_Write_Enable_OUT : out STD_LOGIC;
             DC_WB_Select : out STD_LOGIC;
-            DC_MEM_READ_OUT : out STD_LOGIC; --new output for mem read
             DC_Opcode_OUT : out STD_LOGIC_VECTOR(6 downto 0);
             DC_Shift_OUT : out STD_LOGIC_VECTOR(3 downto 0);
+            
+            --loadimm signals
+            D_M1 : in STD_LOGIC;
+            D_IMM : in STD_LOGIC_VECTOR(7 downto 0);
+            D_EX_M1 : out STD_LOGIC;
+            D_EX_IMM : out STD_LOGIC_VECTOR(7 downto 0);
             
             --new signals for branching
             DC_Displacement_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -263,9 +279,11 @@ architecture Behavioral of Control is
         port(
             rst : in std_logic;
             R_IN_1 : in std_logic_vector(2 downto 0);
-            R_IN_2_branch: in std_logic_vector(2 downto 0);
-            Opcode : in std_logic_vector(6 downto 0);            
-            R1_OUT : out std_logic_vector(2 downto 0)
+            R_IN_2 : in std_logic_vector(2 downto 0);
+            R_dest: in std_logic_vector(2 downto 0);
+            Opcode : in std_logic_vector(6 downto 0);
+            R1_OUT : out std_logic_vector(2 downto 0);
+            R2_OUT : out std_logic_vector(2 downto 0)
         );
     end COMPONENT;
     COMPONENT Forwarding_Unit
@@ -294,25 +312,13 @@ architecture Behavioral of Control is
 
     end COMPONENT;
 
-   COMPONENT Hazard_Unit is
-        Port (
-            rst : in STD_LOGIC; 
-            DC_EX_R2_addr_IN : in STD_LOGIC_VECTOR(2 downto 0);
-            DC_EX_MEM_READ_EN_IN : in STD_LOGIC := '0';
-            F_DC_R1_addr_IN : in STD_LOGIC_VECTOR(2 downto 0);
-            F_DC_R2_addr_IN : in STD_LOGIC_VECTOR(2 downto 0);
-            F_DC_OPCODE_IN : in STD_LOGIC_VECTOR(6 downto 0);
-            DC_EX_OPCODE_IN : in STD_LOGIC_VECTOR(6 downto 0);
-            
-            --outputs
-            STALL_OUT : out STD_LOGIC;
-            PC_WRITE_OUT : out STD_LOGIC 
-        );
-    end COMPONENT;
+   
 
     COMPONENT Fetch_Latch
         port(
             clk : in STD_LOGIC;           
+            branch_taken : in STD_LOGIC;
+
             --inputs
             Instruction : IN STD_LOGIC_VECTOR(15 downto 0);      
 
@@ -322,6 +328,10 @@ architecture Behavioral of Control is
             F_R_in2_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
             F_R_out_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
             F_shift_OUT : out STD_LOGIC_VECTOR(3 downto 0);
+                
+            --signals for load immediate
+            F_IMM : out STD_LOGIC_VECTOR(7 downto 0);
+            F_M1 : out STD_LOGIC; 
             
             PC_IN : IN STD_LOGIC_VECTOR(15 downto 0);
             F_displacementl: out STD_LOGIC_VECTOR(8 downto 0);
@@ -339,7 +349,6 @@ architecture Behavioral of Control is
             PC_Updated : OUT std_logic_vector(15 downto 0);             
             Data_OUT : IN std_logic_vector(15 downto 0);
             Instruction_Register : OUT std_logic_vector(15 downto 0);
-            PC_STALL : IN std_logic; --stalls the program counter
             
             --new signals for branching
             branch_select : IN std_logic;
@@ -399,6 +408,20 @@ architecture Behavioral of Control is
            
     );
     end COMPONENT;
+    
+    COMPONENT RAM_Control
+        port(
+            rst : IN std_logic;
+            Opcode : IN std_logic_vector(6 downto 0);
+            source_in : IN std_logic_vector(15 downto 0);
+            destination_in : IN std_logic_vector(15 downto 0);
+            
+            write_enable_ram : OUT std_logic_vector(0 downto 0);
+            addr_in_ram : OUT std_logic_vector(8 downto 0);
+            data_in_ram : OUT std_logic_vector(15 downto 0)
+        
+        );
+    end COMPONENT;
    
 
 
@@ -407,23 +430,21 @@ begin
     F_Latch_INST: Fetch_Latch port map(clk=>clk, Instruction => IR, F_OpcodeOut => Opcode_F,
                                        F_R_in1_address_OUT => R_in1_address_F, F_R_in2_address_OUT => R_in2_address_F,
                                        F_R_out_address_OUT => R_out_address_F, F_shift_OUT => shift_F,
-                                       PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC); 
-                                       
-   Hazard_Unit_INST : Hazard_Unit port map(rst => rst, DC_EX_R2_addr_IN => R_in2_address_DC_EX, DC_EX_MEM_READ_EN_IN => MEM_READ_DC, F_DC_R1_addr_IN => R_in1_address_F, 
-                                            F_DC_R2_addr_IN => R_in2_address_F, F_DC_OPCODE_IN => Opcode_F, DC_EX_OPCODE_IN => Opcode_DC,
-                                            STALL_OUT => STALL_OUT, PC_WRITE_OUT => PC_WRITE_OUT);
+                                       PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC,
+                                       F_IMM => F_DC_IMM, F_M1=> F_DC_M1, branch_taken => branch_sel); 
                                         
 
     DC_Latch_INST : Decode_Latch port map (clk=>clk, DC_R_data1_IN => r1_data, DC_R_data2_IN => r2_data,
-                                            DC_R_addr1_IN =>R_Select, DC_R_addr2_IN => R_in2_address_F,
+                                            DC_R_addr1_IN =>R_Select1, DC_R_addr2_IN => R_Select2,
                                             DC_R_out_address_IN => R_out_address_F,
-                                            DC_Opcode_IN => Opcode_F , DC_Shift_IN => shift_F, STALL_IN => STALL_OUT,
+                                            DC_Opcode_IN => Opcode_F , DC_Shift_IN => shift_F, 
                                             DC_R_data1_OUT => R_data1_DC, DC_R_data2_OUT => R_data2_DC,
                                             DC_EX_addr1_OUT => R_in1_address_DC_EX, DC_EX_addr2_OUT => R_in2_address_DC_EX,
                                             DC_R_out_address_OUT => R_out_address_DC_EX,
                                             DC_Write_Enable_OUT => WR_Enable_DC, DC_Opcode_OUT => Opcode_DC, DC_Shift_OUT  => Shift_DC,
-                                            DC_WB_Select => Select_DC, DC_MEM_READ_OUT => MEM_READ_DC, DC_Displacement_IN => F_Displacement, DC_Displacement_OUT => Displacement_DC_EX, 
-                                            DC_PC_IN => Fetch_PC, DC_PC_OUT =>PC_DC_EX);
+                                            DC_WB_Select => Select_DC, DC_Displacement_IN => F_Displacement, DC_Displacement_OUT => Displacement_DC_EX, 
+                                            DC_PC_IN => Fetch_PC, DC_PC_OUT =>PC_DC_EX, D_M1=> F_DC_M1,  D_IMM => F_DC_IMM, 
+                                            D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel );
                                             
 
     Forwarding_Unit_INST : Forwarding_Unit port map(Forward_EX_IN => Data_EX_WB, Forward_WB_IN => WB_R_outdata_OUT, Forward_DC_data1_IN => R_data1_DC,
@@ -441,24 +462,24 @@ begin
                                            EX_R_out_data_OUT => Data_EX_WB, EX_R_out_address_OUT => Data_Addr_EX_WB,
                                            EX_select_IN =>Select_DC,EX_select_OUT => Select_EX, 
                                            EX_Branch_Select_IN => Branch_Sel_EX , EX_Branch_Select_OUT => branch_sel,
-                                           EX_PC_IN => PC_DC_EX , EX_PC_OUT => EX_WB_PC);    
+                                           EX_PC_IN => PC_DC_EX , EX_PC_OUT => EX_WB_PC, EX_SOURCE_IN => Forward_ALU_data2,
+                                           EX_DESTINATION_IN => Forward_ALU_data1, EX_SOURCE_OUT => source_data_RAM , EX_DESTINATION_OUT => destination_data_RAM );    
 
     WB_Latch_INST : Writeback_Latch port map(clk=>clk, WB_R_out_data_IN => Data_EX_WB, WB_Select_IN => Select_EX,
                                             WB_R_out_address_IN => Data_Addr_EX_WB, WB_Enable_IN => Write_Enable_EX_WB,
-                                           
                                             WB_R_out_data_OUT => WB_R_outdata_OUT, WB_R_out_address_OUT => WB_R_outaddress_OUT,
                                             WB_Enable_OUT => WB_EN_OUT, INPORT => INPUT_SIGNAL,
-                                            WB_PC2 => EX_WB_PC, WB_Opcode_IN => Opcode_EX_WB, WB_Opcode_OUT => WB_OP_OUT
-                                           );
+                                            WB_PC2 => EX_WB_PC, WB_Opcode_IN => Opcode_EX_WB, WB_Opcode_OUT => WB_OP_OUT,
+                                            WB_LOAD_DATA => douta_RAM);
 
     ALU_INST : ALU port map(A => Forward_ALU_data1, B => Forward_ALU_data2, OpCode => OpCode_DC, Shift_value => Shift_DC,
-                            C => R_data_ALU_OUT, Zero_Negative_flags => Zero_Negative);
+                            C => R_data_ALU_OUT, Zero_Negative_flags => Zero_Negative, M_EX =>DC_EX_M1 ,IMM_EX=>DC_EX_IMM );
    
-    RF8_16_INST: RF8_16 port map( clk => clk, rst => rst, rd_index1 => R_Select , rd_index2 => R_in2_address_F ,
+    RF8_16_INST: RF8_16 port map( clk => clk, rst => rst, rd_index1 => R_Select1 , rd_index2 => R_Select2,
                                   rd_data1 => r1_data , rd_data2 => r2_data , wr_index => WB_R_outaddress_OUT,
                                   wr_data => WB_R_outdata_OUT, wr_enable => WB_EN_OUT);
 
-    Fetch_INST : Fetch port map(clk  => clk, reset => rst, PC => PC_OUT, PC_Updated => PC_Updated, PC_STALL => PC_WRITE_OUT,Data_OUT => Instruction_OUT, Instruction_Register => IR,
+    Fetch_INST : Fetch port map(clk  => clk, reset => rst, PC => PC_OUT, PC_Updated => PC_Updated, Data_OUT => Instruction_OUT, Instruction_Register => IR,
                                 branch_select => branch_sel, branch_PC => Data_EX_WB );
     
     PC_INST : Program_Counter port map(clk => clk, reset => rst, PC_IN => PC_Updated, PC_OUT => PC_OUT, DC_Opcode => Opcode_DC, DC_R7 => R_data1_DC);
@@ -472,9 +493,13 @@ begin
     DISP_INST : Displacement_Calculation port map(rst => rst,Displacement_L => displacementL , Displacement_S => displacementS,
                                                   Opcode => Opcode_F, Displacement_Final => F_Displacement  );
 
-    REG_SEL_INST : Register_Select port map(rst => rst, R_IN_1 => R_in1_address_F , R_IN_2_branch => R_out_address_F, Opcode => Opcode_F ,R1_OUT =>R_Select);
+    REG_SEL_INST : Register_Select port map(rst => rst, R_IN_1 => R_in1_address_F , R_IN_2 => R_in2_address_F ,R_dest => R_out_address_F, Opcode => Opcode_F ,R1_OUT =>R_Select1,
+                                            R2_OUT => R_Select2);
     
     BR_SEL_INST : Branch_Select port map(rst => rst, Opcode => OpCode_DC, ZN_Flags => Zero_Negative, BR_Select => Branch_Sel_EX ); 
+
+    RAM_CTRL_INST : RAM_Control port map(rst => rst, Opcode => Opcode_EX_WB, source_in => source_data_RAM , destination_in => destination_data_RAM , write_enable_ram => wea_RAM, 
+                                         addr_in_ram => addra_RAM,data_in_ram => dina_RAM );
 
         data <= Instruction_OUT;
         ALU_DATA_OUT <= Data_EX_WB;
