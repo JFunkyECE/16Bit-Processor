@@ -27,6 +27,10 @@ entity Decode_Latch is
     D_EX_M1 : out STD_LOGIC;
     D_EX_IMM : out STD_LOGIC_VECTOR(7 downto 0);
     
+    --inport signals
+    DC_INPORT_IN : in STD_LOGIC_VECTOR(15 downto 0);
+    DC_INPORT_OUT : out STD_LOGIC_VECTOR(15 downto 0);
+    
     --outputs
     DC_R_data1_OUT : out STD_LOGIC_VECTOR(15 downto 0);
     DC_R_data2_OUT : out STD_LOGIC_VECTOR(15 downto 0);
@@ -34,7 +38,6 @@ entity Decode_Latch is
     DC_EX_addr2_OUT : out STD_LOGIC_VECTOR(2 downto 0);
     DC_R_out_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
     DC_Write_Enable_OUT : out STD_LOGIC;
-    DC_WB_Select : out STD_LOGIC;
     DC_Opcode_OUT : out STD_LOGIC_VECTOR(6 downto 0);
     DC_Shift_OUT : out STD_LOGIC_VECTOR(3 downto 0)
   );
@@ -51,19 +54,17 @@ begin
     begin
         if rising_edge(clk) or branch_taken = '1'  then
             if branch_taken = '1' or stage_clear = '1' then
-                DC_Opcode_OUT <= DC_Opcode_IN;
+                DC_Opcode_OUT <= "0000000";
                 DC_Write_Enable_OUT <= '0';
-                DC_WB_Select <= '0';
                 DC_R_data1_OUT <= DC_R_data1_IN;
                 DC_R_data2_OUT <= DC_R_data2_IN;
                 DC_EX_addr1_OUT <= DC_R_addr1_IN;
                 DC_EX_addr2_OUT <= DC_R_addr2_IN;
                 DC_R_out_address_OUT <= DC_R_out_address_IN;   
                 DC_Shift_OUT <= DC_Shift_IN;
-                
+                DC_INPORT_OUT <= DC_INPORT_IN;
                 DC_Displacement_OUT <= DC_Displacement_IN;
                 DC_PC_OUT <= DC_PC_IN;
-                
                 D_EX_IMM <= D_IMM;
                 D_EX_M1 <= D_M1;
             else
@@ -71,13 +72,11 @@ begin
                 DC_R_data2_OUT <= DC_R_data2_IN;
                 DC_EX_addr1_OUT <= DC_R_addr1_IN;
                 DC_EX_addr2_OUT <= DC_R_addr2_IN;
---                DC_R_out_address_OUT <= DC_R_out_address_IN;   
                 DC_Opcode_OUT <= DC_Opcode_IN;
                 DC_Shift_OUT <= DC_Shift_IN;
-                
+                DC_INPORT_OUT <= DC_INPORT_IN;
                 DC_Displacement_OUT <= DC_Displacement_IN;
-                DC_PC_OUT <= DC_PC_IN;
-                
+                DC_PC_OUT <= DC_PC_IN;                
                 D_EX_IMM <= D_IMM;
                 D_EX_M1 <= D_M1;
                 
@@ -90,13 +89,10 @@ begin
                 -- will have to get opcode = 70 added for br.sub since r7 is written to
                 if DC_Opcode_IN = "0000001" or DC_Opcode_IN = "0000010" or DC_Opcode_IN = "0000011" or DC_Opcode_IN = "0000100" or DC_Opcode_IN = "0000101" or DC_Opcode_IN = "0000110" or DC_Opcode_IN = "0010010" or DC_Opcode_IN = "0010011" then
                     DC_Write_Enable_OUT <= '1';
-                    DC_WB_Select <= '0';
                 elsif DC_Opcode_IN = "0100001" then
-                    DC_WB_Select <= '1';
                     DC_Write_Enable_OUT <= '1';
                 else
                     DC_Write_Enable_OUT <= '0';
-                    DC_WB_Select <= '0';
                 end if;
             end if;
         end if;

@@ -12,7 +12,7 @@ entity ALU is
         B : in STD_LOGIC_VECTOR(15 downto 0); --could be a register value or an immediate
         OpCode : in STD_LOGIC_VECTOR(6 downto 0); --used to determine which operation is occuring
         Shift_value : in STD_LOGIC_VECTOR(3 downto 0); --Stores immediate for shifting\
-        
+        IN_PORT : in STD_LOGIC_VECTOR(15 downto 0);
         --for load immediate
         M_EX : in STD_LOGIC;
         IMM_EX : in STD_LOGIC_VECTOR(7 downto 0);
@@ -157,6 +157,8 @@ begin
                     end if;
                 when "0010011" => -- Opcode = 19 MOV
                     mux_out := A;
+                when "0100001" =>
+                    mux_out := IN_PORT;
                 when others =>
                     mux_out := (others => '0'); -- Default case
              end case;

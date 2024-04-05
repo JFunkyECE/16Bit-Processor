@@ -27,7 +27,6 @@ ARCHITECTURE behavior OF Control_tb  IS
     SIGNAL read_index1 : STD_LOGIC_VECTOR(2 downto 0);
     SIGNAL read_index2 : STD_LOGIC_VECTOR(2 downto 0);
     SIGNAL data_addr_Out : STD_LOGIC_VECTOR(2 downto 0);  
-    SIGNAL wb_select : STD_LOGIC;
     SIGNAL f_pc :  STD_LOGIC_VECTOR(15 downto 0); 
     SIGNAL f_opcode : STD_LOGIC_VECTOR(6 downto 0);
           
@@ -63,7 +62,6 @@ ARCHITECTURE behavior OF Control_tb  IS
       read_index2 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
       data_addr_Out : out STD_LOGIC_VECTOR(2 downto 0); --for debug
       data_Out : out STD_LOGIC_VECTOR(15 downto 0); --For debug
-      wb_select : out STD_LOGIC;
     
       f_pc : out STD_LOGIC_VECTOR(15 downto 0); 
       f_opcode : out STD_LOGIC_VECTOR(6 downto 0);
@@ -104,7 +102,6 @@ BEGIN
           read_index2 => read_index2,
           data_addr_Out => data_addr_Out,
           data_Out =>dataOUT,
-          wb_select => wb_select,
           f_pc => f_pc,
           f_opcode => f_opcode,
           dc_pc => dc_pc,
@@ -127,8 +124,8 @@ BEGIN
     wait for clk_period;  -- Wait for reset to propagate
  
     INPUT_SIGNAL <= X"0001";
-    wait for clk_period*3;
-    INPUT_SIGNAL <= X"0004";
+--    wait for clk_period;
+--    INPUT_SIGNAL <= X"0004";
     wait for clk_period;
     INPUT_SIGNAL <= X"000c";
     WAIT; -- Wait forever; the simulation will stop here

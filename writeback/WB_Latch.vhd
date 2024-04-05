@@ -9,9 +9,7 @@ entity Writeback_latch is
   --inputs
   WB_R_out_data_IN : in STD_LOGIC_VECTOR(15 downto 0);
   WB_R_out_address_IN : in STD_LOGIC_VECTOR(2 downto 0);
-  WB_Enable_IN : in STD_LOGIC;
-  WB_Select_IN : in STD_LOGIC;
-  
+  WB_Enable_IN : in STD_LOGIC;  
   -- for branching
   WB_PC2 : in STD_LOGIC_VECTOR(15 downto 0);
   WB_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
@@ -39,18 +37,13 @@ begin
             if WB_Opcode_IN = "1000110" then --br.sub, writes pc+2 into r7
                         WB_R_out_data_OUT <= WB_PC2;
                         WB_R_out_address_OUT <= "111";
-                        --WB_R_out_address_OUT <= WB_R_out_address_IN;
                         WB_Enable_OUT <= '1';
             elsif WB_Opcode_IN = "0010000" then --load instruction
                         WB_R_out_data_OUT <= WB_LOAD_DATA;
                         WB_R_out_address_OUT <= WB_R_out_address_IN;
                         WB_Enable_OUT <= '1';
             else
-                if   WB_Select_IN = '1' then
-                    WB_R_out_data_OUT <= INPORT;          
-                else
-                    WB_R_out_data_OUT <= WB_R_out_data_IN;
-                end if;
+                WB_R_out_data_OUT <= WB_R_out_data_IN;
                 WB_R_out_address_OUT <= WB_R_out_address_IN;
                 WB_Enable_OUT <= WB_Enable_IN;          
             end if;
