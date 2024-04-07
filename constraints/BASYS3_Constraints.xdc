@@ -214,8 +214,6 @@ set_property PACKAGE_PIN C15 [get_ports {INPUT_SIGNAL[14]}]
 set_property PACKAGE_PIN C16 [get_ports {INPUT_SIGNAL[15]}]					
 	set_property IOSTANDARD LVCMOS33 [get_ports {INPUT_SIGNAL[15]}]
  
-set_property SEVERITY {Warning} [get_drc_checks UCIO-1]
-
 ##Pmod Header JC
 ##Sch name = JC1
 set_property PACKAGE_PIN K17 [get_ports {clk}]					

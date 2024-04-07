@@ -59,7 +59,7 @@ begin
     begin
      
         if rising_edge(clk) or branch_taken = '1'  then
-            DC_INST_OUT <= DC_INPORT_IN;
+            
             if STALL_IN = '0' then
                 if branch_taken = '1' or stage_clear = '1' then
                     DC_Opcode_OUT <= "0000000";
@@ -70,21 +70,23 @@ begin
                     DC_EX_addr2_OUT <= DC_R_addr2_IN;
                     DC_R_out_address_OUT <= DC_R_out_address_IN;   
                     DC_Shift_OUT <= DC_Shift_IN;
+                    DC_INST_OUT <= DC_INST_IN;
                     DC_INPORT_OUT <= DC_INPORT_IN;
                     DC_Displacement_OUT <= DC_Displacement_IN;
                     DC_PC_OUT <= DC_PC_IN;
                     D_EX_IMM <= D_IMM;
                     D_EX_M1 <= D_M1;
                 else
+                    DC_PC_OUT <= DC_PC_IN;
                     DC_R_data1_OUT <= DC_R_data1_IN;
                     DC_R_data2_OUT <= DC_R_data2_IN;
                     DC_EX_addr1_OUT <= DC_R_addr1_IN;
                     DC_EX_addr2_OUT <= DC_R_addr2_IN;
                     DC_Opcode_OUT <= DC_Opcode_IN;
                     DC_Shift_OUT <= DC_Shift_IN;
+                    DC_INST_OUT <= DC_INST_IN;
                     DC_INPORT_OUT <= DC_INPORT_IN;
                     DC_Displacement_OUT <= DC_Displacement_IN;
-                    DC_PC_OUT <= DC_PC_IN;                
                     D_EX_IMM <= D_IMM;
                     D_EX_M1 <= D_M1;
                     
@@ -108,6 +110,7 @@ begin
                 end if;
             else --stall = 1
                 DC_LOAD_OUT <= '0';
+                DC_INST_OUT <= DC_INST_IN;
                 DC_Write_Enable_OUT <= '0';
                 DC_Opcode_OUT <= "0000000";
             end if;                           

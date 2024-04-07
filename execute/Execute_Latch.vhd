@@ -22,6 +22,7 @@ entity Execute_Latch is
     
     EX_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
     EX_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0); 
+    EX_PC : out STD_LOGIC_VECTOR(15 downto 0);
     --signals for load store
     EX_SOURCE_IN : in STD_LOGIC_VECTOR(15 downto 0);
     EX_DESTINATION_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -50,7 +51,7 @@ begin
                 EX_Branch_Select_OUT <= EX_Branch_Select_IN;
                 EX_DESTINATION_OUT <= EX_DESTINATION_IN;
                 EX_SOURCE_OUT <= EX_SOURCE_IN;
-                
+                EX_PC <= EX_PC_IN;
                 if EX_Branch_Select_IN = '1' then
                     EX_write_enable_OUT <= '0';
                     EX_opcodeOut <= "0000000";

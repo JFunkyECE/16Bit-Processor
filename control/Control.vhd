@@ -163,11 +163,17 @@ architecture Behavioral of Control is
     signal DC_ALU_INPORT : STD_LOGIC_VECTOR(15 downto 0);
     
     --instruction signals
-    signal F_INST : STD_LOGIC_VECTOR(15 downto 0);
+    signal F_INST1 : STD_LOGIC_VECTOR(15 downto 0);
     signal DC_INST : STD_LOGIC_VECTOR(15 downto 0);
     signal EX_INST : STD_LOGIC_VECTOR(15 downto 0);
     signal WB_INST : STD_LOGIC_VECTOR(15 downto 0);
     
+    --pc signals
+    signal PC_FETCH : STD_LOGIC_VECTOR(15 downto 0);
+    signal PC_DECODE : STD_LOGIC_VECTOR(15 downto 0);
+    signal PC_EXECUTE : STD_LOGIC_VECTOR(15 downto 0);
+    signal PC_WRITEBACK : STD_LOGIC_VECTOR(15 downto 0);
+
     --register file signals
     signal r0 : STD_LOGIC_VECTOR(15 downto 0);
     signal r1 : STD_LOGIC_VECTOR(15 downto 0);
@@ -244,6 +250,7 @@ architecture Behavioral of Control is
             
             EX_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
             EX_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0); 
+            EX_PC : out STD_LOGIC_VECTOR(15 downto 0);
             
             --signals for load store
             EX_SOURCE_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -640,14 +647,14 @@ begin
                                        F_R_out_address_OUT => R_out_address_F, F_shift_OUT => shift_F,
                                        PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC,
                                        F_IMM => F_DC_IMM, F_M1=> F_DC_M1, F_INPORT_OUT=> F_DC_INPORT,
-                                       INPORT => INPUT_SIGNAL, F_INST => F_INST ); 
+                                       INPORT => INPUT_SIGNAL, F_INST => F_INST1 ); 
                                        
    Hazard_Unit_INST : Hazard_Unit port map(rst => rst, DC_EX_Rout_addr_IN => R_out_address_DC_EX, DC_EX_LOAD_EN_IN => LOAD_ENABLE_DC, REG_SELECT_DC_R1_addr_IN => R_Select1, 
                                            REG_SELECT_DC_R2_addr_IN => R_Select2, F_DC_OPCODE_IN => Opcode_F, DC_EX_OPCODE_IN => Opcode_DC,
                                            STALL_OUT => STALL_OUT, PC_WRITE_OUT => PC_WRITE_OUT);
                                         
 
-    DC_Latch_INST : Decode_Latch port map (clk=>clk, DC_R_data1_IN => r1_data, DC_R_data2_IN => r2_data,
+    DC_Latch_INST : Decode_Latch port map (clk=>clk, DC_R_data1_IN  => r1_data, DC_R_data2_IN => r2_data,
                                             DC_R_addr1_IN =>R_Select1, DC_R_addr2_IN => R_Select2,
                                             DC_R_out_address_IN => R_out_address_F,
                                             DC_Opcode_IN => Opcode_F , DC_Shift_IN => shift_F,
@@ -660,7 +667,7 @@ begin
                                             DC_PC_IN => Fetch_PC, DC_PC_OUT =>PC_DC_EX, D_M1=> F_DC_M1,  D_IMM => F_DC_IMM, 
                                             D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel, stage_clear => b_return,
                                             DC_INPORT_IN => F_DC_INPORT, DC_INPORT_OUT => DC_ALU_INPORT,
-                                            DC_INST_IN => F_INST, DC_INST_OUT => DC_INST);
+                                            DC_INST_IN => F_INST1, DC_INST_OUT => DC_INST);
                                             
 
     Forwarding_Unit_INST : Forwarding_Unit port map(Forward_EX_IN => Data_EX_WB, Forward_WB_IN => WB_R_outdata_OUT, Forward_DC_data1_IN => R_data1_DC,
@@ -679,7 +686,7 @@ begin
                                            EX_Branch_Select_IN => Branch_Sel_EX , EX_Branch_Select_OUT => branch_sel,
                                            EX_PC_IN => PC_DC_EX , EX_PC_OUT => EX_WB_PC, EX_SOURCE_IN => Forward_ALU_data2,
                                            EX_DESTINATION_IN => Forward_ALU_data1, EX_SOURCE_OUT => source_data_RAM , EX_DESTINATION_OUT => destination_data_RAM,
-                                           EX_INST_IN => DC_INST, EX_INST_OUT => EX_INST );    
+                                           EX_INST_IN => DC_INST, EX_INST_OUT => EX_INST, EX_PC => PC_EXECUTE);    
 
     WB_Latch_INST : Writeback_Latch port map(clk=>clk, WB_R_out_data_IN => Data_EX_WB,
                                             WB_R_out_address_IN => Data_Addr_EX_WB, WB_Enable_IN => Write_Enable_EX_WB,
@@ -744,10 +751,11 @@ begin
         
      console_display : console port map(
         --
+        --
         -- Stage 1 Fetch
         --
-            s1_pc => Fetch_PC,
-            s1_inst => F_INST ,
+            s1_pc => PC_OUT,
+            s1_inst => F_INST1 ,
         
         --
         -- Stage 2 Decode
@@ -769,7 +777,7 @@ begin
         -- Stage 3 Execute
         --
         
-            s3_pc => EX_WB_PC,
+            s3_pc => PC_EXECUTE,
             s3_inst => EX_INST,
         
             s3_reg_a => Data_Addr_EX_WB,
