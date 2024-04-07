@@ -16,6 +16,9 @@ entity Decode_Latch is
     DC_Shift_IN : in STD_LOGIC_VECTOR(3 downto 0);
     STALL_IN : in STD_LOGIC; 
     
+    DC_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
+    DC_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0);
+    
     --new signals
     DC_Displacement_IN : in STD_LOGIC_VECTOR(15 downto 0);
     DC_PC_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -54,7 +57,9 @@ begin
     
     process(clk)
     begin
+     
         if rising_edge(clk) or branch_taken = '1'  then
+            DC_INST_OUT <= DC_INPORT_IN;
             if STALL_IN = '0' then
                 if branch_taken = '1' or stage_clear = '1' then
                     DC_Opcode_OUT <= "0000000";

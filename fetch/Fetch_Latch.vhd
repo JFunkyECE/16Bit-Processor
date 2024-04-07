@@ -6,6 +6,7 @@ entity Fetch_Latch is
       clk : in STD_LOGIC;
       --inputs
       Instruction : IN STD_LOGIC_VECTOR(15 downto 0);
+      F_INST : OUT STD_LOGIC_VECTOR(15 downto 0);
       --new signals for branch
       PC_IN : IN STD_LOGIC_VECTOR(15 downto 0);
       F_displacementl: out STD_LOGIC_VECTOR(8 downto 0);
@@ -46,7 +47,8 @@ begin
                     F_displacements <= Instruction(5 downto 0);
                     F_IMM <= Instruction(7 downto 0);    
                     F_M1 <=  Instruction(8);   
-                    F_INPORT_OUT <= INPORT;    
+                    F_INPORT_OUT <= INPORT; 
+                    F_INST <= Instruction;   
             end if;
             end process;
 

@@ -15,6 +15,9 @@ entity Writeback_latch is
   WB_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
   WB_Opcode_OUT : out STD_LOGIC_VECTOR(6 downto 0);
   
+  WB_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
+  WB_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0);
+  
   -- for load
   WB_LOAD_DATA : in STD_LOGIC_VECTOR(15 downto 0);
   
@@ -33,6 +36,7 @@ begin
     process(clk)
     begin
         if rising_edge(clk) then --Data is always set on the rising edge of the clock
+            WB_INST_OUT <= WB_INST_IN;
             WB_Opcode_OUT <= WB_Opcode_IN;
             if WB_Opcode_IN = "1000110" then --br.sub, writes pc+2 into r7
                         WB_R_out_data_OUT <= WB_PC2;

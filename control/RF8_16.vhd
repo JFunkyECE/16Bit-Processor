@@ -10,6 +10,18 @@ rd_index1: in std_logic_vector(2 downto 0);
 rd_index2: in std_logic_vector(2 downto 0); 
 rd_data1: out std_logic_vector(15 downto 0); 
 rd_data2: out std_logic_vector(15 downto 0);
+
+--temp signals for registers
+r0 : out std_logic_vector(15 downto 0); 
+r1 : out std_logic_vector(15 downto 0); 
+r2 : out std_logic_vector(15 downto 0); 
+r3 : out std_logic_vector(15 downto 0); 
+r4 : out std_logic_vector(15 downto 0); 
+r5 : out std_logic_vector(15 downto 0); 
+r6 : out std_logic_vector(15 downto 0); 
+r7 : out std_logic_vector(15 downto 0); 
+
+
 --write signals
 wr_index: in std_logic_vector(2 downto 0); 
 wr_data: in std_logic_vector(15 downto 0); wr_enable: in std_logic);
@@ -60,5 +72,14 @@ rd_data2 <=
             reg_file(4) when(rd_index2="100") else
             reg_file(5) when(rd_index2="101") else
             reg_file(6) when(rd_index2="110") else reg_file(7);
-            
+
+r0 <= reg_file(0);            
+r1 <= reg_file(1);            
+r2 <= reg_file(2);            
+r3 <= reg_file(3);            
+r4 <= reg_file(4);            
+r5 <= reg_file(5);            
+r6 <= reg_file(6);            
+r7 <= reg_file(7);            
+
 end behavioural;

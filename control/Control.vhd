@@ -11,30 +11,41 @@ entity Control is
   --inputs
   INPUT_SIGNAL : in STD_LOGIC_VECTOR(15 downto 0);
 
-  --outputs
-  data : out STD_LOGIC_VECTOR(15 downto 0);
-  ALU_DATA_OUT : out STD_LOGIC_VECTOR(15 downto 0);
-  read_data1 : out STD_LOGIC_VECTOR(15 downto 0); --for debug
-  read_data2 : out STD_LOGIC_VECTOR(15 downto 0); --for debug
-  read_index1 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
-  read_index2 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
-  data_addr_Out : out STD_LOGIC_VECTOR(2 downto 0); --for debug
-  data_Out : out STD_LOGIC_VECTOR(15 downto 0); --For debug
+--  --outputs
+--  data : out STD_LOGIC_VECTOR(15 downto 0);
+--  ALU_DATA_OUT : out STD_LOGIC_VECTOR(15 downto 0);
+--  read_data1 : out STD_LOGIC_VECTOR(15 downto 0); --for debug
+--  read_data2 : out STD_LOGIC_VECTOR(15 downto 0); --for debug
+--  read_index1 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
+--  read_index2 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
+--  data_addr_Out : out STD_LOGIC_VECTOR(2 downto 0); --for debug
+--  data_Out : out STD_LOGIC_VECTOR(15 downto 0); --For debug
 
-  f_pc : out STD_LOGIC_VECTOR(15 downto 0); 
-  f_opcode : out STD_LOGIC_VECTOR(6 downto 0);
+--  f_pc : out STD_LOGIC_VECTOR(15 downto 0); 
+--  f_opcode : out STD_LOGIC_VECTOR(6 downto 0);
   
-  dc_pc : out STD_LOGIC_VECTOR(15 downto 0);
-  dc_displacement : out STD_LOGIC_VECTOR(15 downto 0);
+--  dc_pc : out STD_LOGIC_VECTOR(15 downto 0);
+--  dc_displacement : out STD_LOGIC_VECTOR(15 downto 0);
   
-  ex_branchsel : out STD_LOGIC;
-  ex_data_out : out STD_LOGIC_VECTOR(15 downto 0);
+--  ex_branchsel : out STD_LOGIC;
+--  ex_data_out : out STD_LOGIC_VECTOR(15 downto 0);
   
-  writeback_data : out STD_LOGIC_VECTOR(15 downto 0);
-  writeback_addr : out STD_LOGIC_VECTOR(2 downto 0);
-  writeback_enable : out STD_LOGIC;
-  writeback_PC2 : out STD_LOGIC_VECTOR(15 downto 0);
-  writeback_opcode : out STD_LOGIC_VECTOR(6 downto 0)
+--  writeback_data : out STD_LOGIC_VECTOR(15 downto 0);
+--  writeback_addr : out STD_LOGIC_VECTOR(2 downto 0);
+--  writeback_enable : out STD_LOGIC;
+--  writeback_PC2 : out STD_LOGIC_VECTOR(15 downto 0);
+--  writeback_opcode : out STD_LOGIC_VECTOR(6 downto 0);
+  debug_console : in STD_LOGIC;
+  board_clock: in std_logic;
+ 
+  vga_red : out std_logic_vector( 3 downto 0 );
+  vga_green : out std_logic_vector( 3 downto 0 );
+  vga_blue : out std_logic_vector( 3 downto 0 );
+ 
+  h_sync_signal : out std_logic;
+  v_sync_signal : out std_logic
+  
+  
   );
 
 end Control;
@@ -151,7 +162,22 @@ architecture Behavioral of Control is
     signal F_DC_INPORT : STD_LOGIC_VECTOR(15 downto 0);
     signal DC_ALU_INPORT : STD_LOGIC_VECTOR(15 downto 0);
     
+    --instruction signals
+    signal F_INST : STD_LOGIC_VECTOR(15 downto 0);
+    signal DC_INST : STD_LOGIC_VECTOR(15 downto 0);
+    signal EX_INST : STD_LOGIC_VECTOR(15 downto 0);
+    signal WB_INST : STD_LOGIC_VECTOR(15 downto 0);
     
+    --register file signals
+    signal r0 : STD_LOGIC_VECTOR(15 downto 0);
+    signal r1 : STD_LOGIC_VECTOR(15 downto 0);
+    signal r2 : STD_LOGIC_VECTOR(15 downto 0);
+    signal r3 : STD_LOGIC_VECTOR(15 downto 0);
+    signal r4 : STD_LOGIC_VECTOR(15 downto 0);
+    signal r5 : STD_LOGIC_VECTOR(15 downto 0);
+    signal r6 : STD_LOGIC_VECTOR(15 downto 0);
+    signal r7 : STD_LOGIC_VECTOR(15 downto 0);
+
     COMPONENT ALU
         port(
             --clk : in STD_LOGIC;
@@ -185,6 +211,9 @@ architecture Behavioral of Control is
             WB_PC2 : in STD_LOGIC_VECTOR(15 downto 0);
             WB_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
             WB_Opcode_OUT : out STD_LOGIC_VECTOR(6 downto 0);
+            
+            WB_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
+            WB_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             -- for load
             WB_LOAD_DATA : in STD_LOGIC_VECTOR(15 downto 0);
             --outputs
@@ -212,6 +241,9 @@ architecture Behavioral of Control is
             EX_opcodeOut : out STD_LOGIC_VECTOR(6 downto 0);
             EX_R_out_data_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             EX_R_out_address_OUT : out  STD_LOGIC_VECTOR(2 downto 0);
+            
+            EX_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
+            EX_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0); 
             
             --signals for load store
             EX_SOURCE_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -241,7 +273,9 @@ architecture Behavioral of Control is
             DC_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
             DC_Shift_IN : in STD_LOGIC_VECTOR(3 downto 0);
             STALL_IN : in STD_LOGIC; 
-              
+            
+            DC_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
+            DC_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0);
               --outputs
             DC_R_data1_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             DC_R_data2_OUT : out STD_LOGIC_VECTOR(15 downto 0);
@@ -353,7 +387,7 @@ architecture Behavioral of Control is
 
             --inputs
             Instruction : IN STD_LOGIC_VECTOR(15 downto 0);     
-
+            F_INST : OUT STD_LOGIC_VECTOR(15 downto 0);
             --outputs
             F_OpcodeOut : out STD_LOGIC_VECTOR(6 downto 0);
             F_R_in1_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
@@ -413,6 +447,15 @@ architecture Behavioral of Control is
             rd_index2: in std_logic_vector(2 downto 0);
             rd_data1: out std_logic_vector(15 downto 0);
             rd_data2: out std_logic_vector(15 downto 0);
+            
+            r0 : out std_logic_vector(15 downto 0); 
+            r1 : out std_logic_vector(15 downto 0); 
+            r2 : out std_logic_vector(15 downto 0); 
+            r3 : out std_logic_vector(15 downto 0); 
+            r4 : out std_logic_vector(15 downto 0); 
+            r5 : out std_logic_vector(15 downto 0); 
+            r6 : out std_logic_vector(15 downto 0); 
+            r7 : out std_logic_vector(15 downto 0); 
 
             --write signals
             wr_index: in std_logic_vector(2 downto 0);
@@ -458,6 +501,135 @@ architecture Behavioral of Control is
         
         );
     end COMPONENT;
+    
+    
+    component console is
+        port (
+    
+    --
+    -- Stage 1 Fetch
+    --
+            s1_pc : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            s1_inst : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    
+    
+    --
+    -- Stage 2 Decode
+    --
+            s2_pc : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            s2_inst : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    
+            s2_reg_a : in STD_LOGIC_VECTOR( 2 downto 0 );
+            s2_reg_b : in STD_LOGIC_VECTOR( 2 downto 0 );
+            s2_reg_c : in STD_LOGIC_VECTOR( 2 downto 0 );
+    
+            s2_reg_a_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+            s2_reg_b_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+            s2_reg_c_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+            s2_immediate : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+    
+    --
+    -- Stage 3 Execute
+    --
+            s3_pc : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            s3_inst : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    
+            s3_reg_a : in STD_LOGIC_VECTOR( 2 downto 0 );
+            s3_reg_b : in STD_LOGIC_VECTOR( 2 downto 0 );
+            s3_reg_c : in STD_LOGIC_VECTOR( 2 downto 0 );
+    
+            s3_reg_a_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+            s3_reg_b_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+            s3_reg_c_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+            s3_immediate : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+    --
+    -- Branch and memory operation
+    --
+            s3_r_wb : in STD_LOGIC;
+            s3_r_wb_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+            s3_br_wb : in STD_LOGIC;
+            s3_br_wb_address : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+            s3_mr_wr : in STD_LOGIC;
+            s3_mr_wr_address : in STD_LOGIC_VECTOR( 15 downto 0 );
+            s3_mr_wr_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+            s3_mr_rd : in STD_LOGIC;
+            s3_mr_rd_address : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+    --
+    -- Stage 4 Memory
+    --
+            s4_pc : in STD_LOGIC_VECTOR( 15 downto 0 );
+            s4_inst : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+            s4_reg_a : in STD_LOGIC_VECTOR( 2 downto 0 );
+    
+            s4_r_wb : in STD_LOGIC;
+            s4_r_wb_data : in STD_LOGIC_VECTOR( 15 downto 0 );
+    
+    --
+    -- CPU registers
+    --
+    
+            register_0 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            register_1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            register_2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            register_3 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            register_4 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            register_5 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            register_6 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+            register_7 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    
+    --
+    -- CPU registers overflow flags
+    --
+            register_0_of : in STD_LOGIC;
+            register_1_of : in STD_LOGIC;
+            register_2_of : in STD_LOGIC;
+            register_3_of : in STD_LOGIC;
+            register_4_of : in STD_LOGIC;
+            register_5_of : in STD_LOGIC;
+            register_6_of : in STD_LOGIC;
+            register_7_of : in STD_LOGIC;
+    
+    --
+    -- CPU Flags
+    --
+            zero_flag : in STD_LOGIC;
+            negative_flag : in STD_LOGIC;
+            overflow_flag : in STD_LOGIC;
+    
+    --
+    -- Debug screen enable
+    --
+            debug : in STD_LOGIC;
+    
+    --
+    -- Text console display memory access signals ( clk is the processor clock )
+    --
+            addr_write : in  STD_LOGIC_VECTOR (15 downto 0);
+            clk : in  STD_LOGIC;
+            data_in : in  STD_LOGIC_VECTOR (15 downto 0);
+            en_write : in  STD_LOGIC;
+    
+    --
+    -- Video related signals
+    --
+            board_clock : in STD_LOGIC;
+            v_sync_signal : out STD_LOGIC;
+            h_sync_signal : out STD_LOGIC;
+            vga_red : out STD_LOGIC_VECTOR( 3 downto 0 );
+            vga_green : out STD_LOGIC_VECTOR( 3 downto 0 );
+            vga_blue : out STD_LOGIC_VECTOR( 3 downto 0 )
+    
+        );
+    end component;
    
 
 
@@ -468,7 +640,7 @@ begin
                                        F_R_out_address_OUT => R_out_address_F, F_shift_OUT => shift_F,
                                        PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC,
                                        F_IMM => F_DC_IMM, F_M1=> F_DC_M1, F_INPORT_OUT=> F_DC_INPORT,
-                                       INPORT => INPUT_SIGNAL); 
+                                       INPORT => INPUT_SIGNAL, F_INST => F_INST ); 
                                        
    Hazard_Unit_INST : Hazard_Unit port map(rst => rst, DC_EX_Rout_addr_IN => R_out_address_DC_EX, DC_EX_LOAD_EN_IN => LOAD_ENABLE_DC, REG_SELECT_DC_R1_addr_IN => R_Select1, 
                                            REG_SELECT_DC_R2_addr_IN => R_Select2, F_DC_OPCODE_IN => Opcode_F, DC_EX_OPCODE_IN => Opcode_DC,
@@ -487,7 +659,8 @@ begin
                                             DC_Displacement_IN => F_Displacement, DC_Displacement_OUT => Displacement_DC_EX, 
                                             DC_PC_IN => Fetch_PC, DC_PC_OUT =>PC_DC_EX, D_M1=> F_DC_M1,  D_IMM => F_DC_IMM, 
                                             D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel, stage_clear => b_return,
-                                            DC_INPORT_IN => F_DC_INPORT, DC_INPORT_OUT => DC_ALU_INPORT);
+                                            DC_INPORT_IN => F_DC_INPORT, DC_INPORT_OUT => DC_ALU_INPORT,
+                                            DC_INST_IN => F_INST, DC_INST_OUT => DC_INST);
                                             
 
     Forwarding_Unit_INST : Forwarding_Unit port map(Forward_EX_IN => Data_EX_WB, Forward_WB_IN => WB_R_outdata_OUT, Forward_DC_data1_IN => R_data1_DC,
@@ -505,14 +678,15 @@ begin
                                            EX_R_out_data_OUT => Data_EX_WB, EX_R_out_address_OUT => Data_Addr_EX_WB,
                                            EX_Branch_Select_IN => Branch_Sel_EX , EX_Branch_Select_OUT => branch_sel,
                                            EX_PC_IN => PC_DC_EX , EX_PC_OUT => EX_WB_PC, EX_SOURCE_IN => Forward_ALU_data2,
-                                           EX_DESTINATION_IN => Forward_ALU_data1, EX_SOURCE_OUT => source_data_RAM , EX_DESTINATION_OUT => destination_data_RAM );    
+                                           EX_DESTINATION_IN => Forward_ALU_data1, EX_SOURCE_OUT => source_data_RAM , EX_DESTINATION_OUT => destination_data_RAM,
+                                           EX_INST_IN => DC_INST, EX_INST_OUT => EX_INST );    
 
     WB_Latch_INST : Writeback_Latch port map(clk=>clk, WB_R_out_data_IN => Data_EX_WB,
                                             WB_R_out_address_IN => Data_Addr_EX_WB, WB_Enable_IN => Write_Enable_EX_WB,
                                             WB_R_out_data_OUT => WB_R_outdata_OUT, WB_R_out_address_OUT => WB_R_outaddress_OUT,
                                             WB_Enable_OUT => WB_EN_OUT, INPORT => INPUT_SIGNAL,
                                             WB_PC2 => EX_WB_PC, WB_Opcode_IN => Opcode_EX_WB, WB_Opcode_OUT => WB_OP_OUT,
-                                            WB_LOAD_DATA => douta_RAM);
+                                            WB_LOAD_DATA => douta_RAM, WB_INST_IN => EX_INST , WB_INST_OUT => WB_INST);
 
     ALU_INST : ALU port map(A => Forward_ALU_data1, B => Forward_ALU_data2, OpCode => OpCode_DC, Shift_value => Shift_DC,
                             C => R_data_ALU_OUT, Zero_Negative_flags => Zero_Negative, M_EX =>DC_EX_M1 ,IMM_EX=>DC_EX_IMM,
@@ -520,7 +694,8 @@ begin
    
     RF8_16_INST: RF8_16 port map( clk => clk, rst => rst, rd_index1 => R_Select1 , rd_index2 => R_Select2,
                                   rd_data1 => r1_data , rd_data2 => r2_data , wr_index => WB_R_outaddress_OUT,
-                                  wr_data => WB_R_outdata_OUT, wr_enable => WB_EN_OUT);
+                                  wr_data => WB_R_outdata_OUT, wr_enable => WB_EN_OUT, r0 => r0, 
+                                  r1 => r1, r2 => r2, r3 => r3, r4 => r4, r5 => r5, r6 => r6, r7 => r7);
 
     Fetch_INST : Fetch port map(clk  => clk, reset => rst, PC => PC_OUT, PC_Updated => PC_Updated, Data_OUT_ROM => Instruction_OUT_ROM, Instruction_Register => IR,
                                 branch_select => branch_sel, branch_PC => Data_EX_WB, PC_STALL =>PC_WRITE_OUT, Data_OUT_RAM => Instruction_OUT_RAM);
@@ -544,26 +719,144 @@ begin
     RAM_CTRL_INST : RAM_Control port map(rst => rst, Opcode => Opcode_EX_WB, source_in => source_data_RAM , destination_in => destination_data_RAM , write_enable_ram => wea_RAM, 
                                          addr_in_ram => addra_RAM,data_in_ram => dina_RAM );
 
-        data <= IR;
-        ALU_DATA_OUT <= Data_EX_WB;
-        read_data1 <= r1_data;
-        read_data2 <= r2_data;
-        read_index1 <= R_in1_address_F;
-        read_index2 <= R_in2_address_F;
-        data_addr_Out <= WB_R_outaddress_OUT;
-        data_Out <= WB_R_outdata_OUT;
+--        data <= IR;
+--        ALU_DATA_OUT <= Data_EX_WB;
+--        read_data1 <= r1_data;
+--        read_data2 <= r2_data;
+--        read_index1 <= R_in1_address_F;
+--        read_index2 <= R_in2_address_F;
+--        data_addr_Out <= WB_R_outaddress_OUT;
+--        data_Out <= WB_R_outdata_OUT;
         
-        f_pc <= Fetch_PC;
-        f_opcode <=  Opcode_F;
-        dc_pc <= PC_DC_EX;
-        dc_displacement <= Displacement_DC_EX;
-        ex_branchsel <= branch_sel;
-        ex_data_out <= Data_EX_WB;
+--        f_pc <= Fetch_PC;
+--        f_opcode <=  Opcode_F;
+--        dc_pc <= PC_DC_EX;
+--        dc_displacement <= Displacement_DC_EX;
+--        ex_branchsel <= branch_sel;
+--        ex_data_out <= Data_EX_WB;
         
-        writeback_data <= WB_R_outdata_OUT;
-        writeback_addr <= WB_R_outaddress_OUT;
-        writeback_enable <= WB_EN_OUT;
-        writeback_PC2 <= EX_WB_PC;
-        writeback_opcode <= WB_OP_OUT;
+--        writeback_data <= WB_R_outdata_OUT;
+--        writeback_addr <= WB_R_outaddress_OUT;
+--        writeback_enable <= WB_EN_OUT;
+--        writeback_PC2 <= EX_WB_PC;
+--        writeback_opcode <= WB_OP_OUT;
+        
+        
+     console_display : console port map(
+        --
+        -- Stage 1 Fetch
+        --
+            s1_pc => Fetch_PC,
+            s1_inst => F_INST ,
+        
+        --
+        -- Stage 2 Decode
+        --
+        
+            s2_pc => PC_DC_EX,
+            s2_inst => DC_INST,
+        
+            s2_reg_a => R_out_address_DC_EX,
+            s2_reg_b => R_in1_address_DC_EX,
+            s2_reg_c => R_in2_address_DC_EX,
+        
+            s2_reg_a_data => x"0000",
+            s2_reg_b_data => R_data1_DC,
+            s2_reg_c_data => R_data2_DC,
+            s2_immediate => x"0000" ,
+        
+        --
+        -- Stage 3 Execute
+        --
+        
+            s3_pc => EX_WB_PC,
+            s3_inst => EX_INST,
+        
+            s3_reg_a => Data_Addr_EX_WB,
+            s3_reg_b => "000",
+            s3_reg_c => "000",
+        
+            s3_reg_a_data => Data_EX_WB,
+            s3_reg_b_data => Forward_ALU_data1,
+            s3_reg_c_data => Forward_ALU_data2,
+            s3_immediate => x"0000",
+        
+            s3_r_wb => '0',
+            s3_r_wb_data => x"0000",
+        
+            s3_br_wb => '0',
+            s3_br_wb_address => x"0000",
+        
+            s3_mr_wr => '0',
+            s3_mr_wr_address => x"0000",
+            s3_mr_wr_data => x"0000",
+        
+            s3_mr_rd => '0',
+            s3_mr_rd_address => x"0000",
+        
+        --
+        -- Stage 4 Memory
+        --
+        
+            s4_pc => x"0000",
+            s4_inst => WB_INST,
+            s4_reg_a => WB_R_outaddress_OUT,
+            s4_r_wb => WB_EN_OUT,
+            s4_r_wb_data => WB_R_outdata_OUT,
+        
+        --
+        -- CPU registers
+        --
+        
+            register_0 => r0,
+            register_1 => r1,
+            register_2 => r2,
+            register_3 => r3,
+            register_4 => r4,
+            register_5 => r5,
+            register_6 => r6,
+            register_7 => r7,
+        
+            register_0_of => '0',
+            register_1_of => '0',
+            register_2_of => '0',
+            register_3_of => '0',
+            register_4_of => '0',
+            register_5_of => '0',
+            register_6_of => '0',
+            register_7_of => '0',
+        
+        --
+        -- CPU Flags
+        --
+            zero_flag => '0',
+            negative_flag => '0',
+            overflow_flag => '0',
+        
+        --
+        -- Debug screen enable
+        --
+            debug => debug_console,
+        
+        --
+        -- Text console display memory access signals ( clk is the processor clock )
+        --
+        
+            clk => '0',
+            addr_write => x"0000",
+            data_in => x"0000",
+            en_write => '0',
+        
+        --
+        -- Video related signals
+        --
+        
+            board_clock => board_clock,
+            h_sync_signal => h_sync_signal,
+            v_sync_signal => v_sync_signal,
+            vga_red => vga_red,
+            vga_green => vga_green,
+            vga_blue => vga_blue
+        );
         
 end Behavioral;

@@ -20,6 +20,8 @@ entity Execute_Latch is
     EX_PC_OUT : out STD_LOGIC_VECTOR(15 downto 0);
     --will use data out as the branch address to go to.
     
+    EX_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
+    EX_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0); 
     --signals for load store
     EX_SOURCE_IN : in STD_LOGIC_VECTOR(15 downto 0);
     EX_DESTINATION_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -39,6 +41,7 @@ begin
     process(clk)
         begin
             if rising_edge(clk) then --Data is always set on the rising edge of the clock
+                EX_INST_OUT <= EX_INST_IN;
                 EX_R_out_data_OUT <= EX_ALU_data_IN;
                 EX_R_out_address_OUT <= EX_R_out_address_IN;
                 EX_NegativeZero_OUT <= EX_NegativeZero_IN;
