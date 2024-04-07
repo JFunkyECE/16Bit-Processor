@@ -39,7 +39,7 @@ ARCHITECTURE behavior OF Control_tb  IS
     SIGNAL writeback_addr : STD_LOGIC_VECTOR(2 downto 0);
     SIGNAL writeback_enable : STD_LOGIC;
     SIGNAL writeback_PC2 : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL   writeback_opcode :  STD_LOGIC_VECTOR(6 downto 0);
+    SIGNAL writeback_opcode :  STD_LOGIC_VECTOR(6 downto 0);
     
 --    SIGNAL forwardedoutA : STD_LOGIC_VECTOR(15 downto 0);
 --    SIGNAL forwardedoutB : STD_LOGIC_VECTOR(15 downto 0);
@@ -124,10 +124,12 @@ BEGIN
     wait for clk_period;  -- Wait for reset to propagate
  
     INPUT_SIGNAL <= X"0001";
---    wait for clk_period;
---    INPUT_SIGNAL <= X"0004";
     wait for clk_period;
-    INPUT_SIGNAL <= X"000c";
+    INPUT_SIGNAL <= X"0001";
+    wait for clk_period;
+    INPUT_SIGNAL <= X"0001";
+    wait for clk_period;
+    INPUT_SIGNAL <= X"000a";
     WAIT; -- Wait forever; the simulation will stop here
 
     END PROCESS;

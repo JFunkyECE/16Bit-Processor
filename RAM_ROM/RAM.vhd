@@ -31,7 +31,7 @@ xpm_memory_dpdistram_inst : xpm_memory_dpdistram
     -- Common module generics
     MEMORY_SIZE             => 8192,           --positive integer
     CLOCKING_MODE           => "common_clock", --string; "common_clock", "independent_clock" 
-    MEMORY_INIT_FILE        => "none",         --string; "none" or "<filename>.mem" 
+    MEMORY_INIT_FILE        => "data.mem",         --string; "none" or "<filename>.mem" 
     MEMORY_INIT_PARAM       => "",             --string;
     USE_MEM_INIT            => 1,              --integer; 0,1
     MESSAGE_CONTROL         => 0,              --integer; 0,1

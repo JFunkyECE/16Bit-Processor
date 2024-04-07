@@ -13,6 +13,8 @@ entity Fetch is
     
     Instruction_Register : OUT std_logic_vector(15 downto 0);
     
+    PC_STALL : IN STD_LOGIC; --Stalls the program counter
+    
     --new signals for branch
     branch_select : IN std_logic;
     branch_PC : IN std_logic_vector(15 downto 0)
@@ -23,17 +25,21 @@ end Fetch;
 
 architecture Behavioral of Fetch is
 begin
-  process (branch_select, branch_PC, reset, PC, Data_OUT ) -- Updated process sensitivity list to include reset
+  process (branch_select, branch_PC, reset, PC, Data_OUT, PC_STALL) -- Updated process sensitivity list to include reset
   begin
     if reset = '1' then
       -- Initialize outputs to 0 on reset
       PC_Updated <= (others => '0');
       Instruction_Register <= (others => '0');
-    elsif branch_select = '0' then 
-      -- Update logic based on clock signal
-      PC_Updated <= std_logic_vector(unsigned(PC) + to_unsigned(2, 16));
-    else
-      PC_Updated <= branch_PC;
+    elsif PC_STALL = '0' then
+        if branch_select = '0' then 
+          -- Update logic based on clock signal
+          PC_Updated <= std_logic_vector(unsigned(PC) + to_unsigned(2, 16));
+        else
+          PC_Updated <= branch_PC;
+        end if;
+    elsif PC_STALL = '1' then
+        PC_Updated <= PC;
     end if;
     Instruction_Register <= Data_OUT;
   end process;
