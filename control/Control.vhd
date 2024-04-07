@@ -99,7 +99,8 @@ architecture Behavioral of Control is
     
     --signals for fetch stage
     signal PC_OUT : STD_LOGIC_VECTOR(15 downto 0);
-    signal Instruction_OUT : STD_LOGIC_VECTOR(15 downto 0);
+    signal Instruction_OUT_ROM : STD_LOGIC_VECTOR(15 downto 0);
+    signal Instruction_OUT_RAM : STD_LOGIC_VECTOR(15 downto 0);
     signal PC_Updated : STD_LOGIC_VECTOR(15 downto 0);
     signal IR : STD_LOGIC_VECTOR(15 downto 0);
     
@@ -382,7 +383,8 @@ architecture Behavioral of Control is
             reset : IN std_logic;           
             PC : IN std_logic_vector(15 downto 0); 
             PC_Updated : OUT std_logic_vector(15 downto 0);             
-            Data_OUT : IN std_logic_vector(15 downto 0);
+            Data_OUT_ROM : IN std_logic_vector(15 downto 0); 
+            Data_OUT_RAM : IN std_logic_vector(15 downto 0);
             Instruction_Register : OUT std_logic_vector(15 downto 0);
             branch_select : IN std_logic;
             branch_PC : IN std_logic_vector(15 downto 0);
@@ -520,16 +522,16 @@ begin
                                   rd_data1 => r1_data , rd_data2 => r2_data , wr_index => WB_R_outaddress_OUT,
                                   wr_data => WB_R_outdata_OUT, wr_enable => WB_EN_OUT);
 
-    Fetch_INST : Fetch port map(clk  => clk, reset => rst, PC => PC_OUT, PC_Updated => PC_Updated, Data_OUT => Instruction_OUT, Instruction_Register => IR,
-                                branch_select => branch_sel, branch_PC => Data_EX_WB, PC_STALL =>PC_WRITE_OUT);
+    Fetch_INST : Fetch port map(clk  => clk, reset => rst, PC => PC_OUT, PC_Updated => PC_Updated, Data_OUT_ROM => Instruction_OUT_ROM, Instruction_Register => IR,
+                                branch_select => branch_sel, branch_PC => Data_EX_WB, PC_STALL =>PC_WRITE_OUT, Data_OUT_RAM => Instruction_OUT_RAM);
     
     PC_INST : Program_Counter port map(clk => clk, reset => rst, PC_IN => PC_Updated, PC_OUT => PC_OUT, DC_Opcode => Opcode_DC, DC_R7 => R_data1_DC);
     
-    ROM_INST : ROM port map(clka_ROM => clk, rsta_ROM => rst, addra_ROM => PC_OUT(9 downto 1) , douta_ROM => Instruction_OUT);
+    ROM_INST : ROM port map(clka_ROM => clk, rsta_ROM => rst, addra_ROM => PC_OUT(9 downto 1) , douta_ROM => Instruction_OUT_ROM);
     
     RAM_INST : RAM port map(clka_RAM => clk, wea_RAM => wea_RAM , addra_RAM => addra_RAM,
-                            dina_RAM => dina_RAM, douta_RAM => douta_RAM, rstb_RAM => rst, addrb_RAM => addrb_RAM,
-                            doutb_RAM => doutb_RAM, rsta_RAM => rst);
+                            dina_RAM => dina_RAM, douta_RAM => douta_RAM, rstb_RAM => rst, addrb_RAM => PC_OUT(9 downto 1),
+                            doutb_RAM => Instruction_OUT_RAM, rsta_RAM => rst);
     
     DISP_INST : Displacement_Calculation port map(rst => rst,Displacement_L => displacementL , Displacement_S => displacementS,
                                                   Opcode => Opcode_F, Displacement_Final => F_Displacement  );
@@ -542,7 +544,7 @@ begin
     RAM_CTRL_INST : RAM_Control port map(rst => rst, Opcode => Opcode_EX_WB, source_in => source_data_RAM , destination_in => destination_data_RAM , write_enable_ram => wea_RAM, 
                                          addr_in_ram => addra_RAM,data_in_ram => dina_RAM );
 
-        data <= Instruction_OUT;
+        data <= IR;
         ALU_DATA_OUT <= Data_EX_WB;
         read_data1 <= r1_data;
         read_data2 <= r2_data;

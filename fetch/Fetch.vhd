@@ -9,8 +9,8 @@ entity Fetch is
     PC : IN std_logic_vector(15 downto 0); --read from program counter register
     PC_Updated : OUT std_logic_vector(15 downto 0); --holds updated PC value after incrementing by 2 or getting branch instruction
     
-    Data_OUT : IN std_logic_vector(15 downto 0); -- holds data thats filled into fetch latch
-    
+    Data_OUT_ROM : IN std_logic_vector(15 downto 0); 
+    Data_OUT_RAM : IN std_logic_vector(15 downto 0);
     Instruction_Register : OUT std_logic_vector(15 downto 0);
     
     PC_STALL : IN STD_LOGIC; --Stalls the program counter
@@ -25,7 +25,7 @@ end Fetch;
 
 architecture Behavioral of Fetch is
 begin
-  process (branch_select, branch_PC, reset, PC, Data_OUT, PC_STALL) -- Updated process sensitivity list to include reset
+  process (branch_select, branch_PC, reset, PC, Data_OUT_RAM, Data_OUT_ROM, PC_STALL) -- Updated process sensitivity list to include reset
   begin
     if reset = '1' then
       -- Initialize outputs to 0 on reset
@@ -41,6 +41,12 @@ begin
     elsif PC_STALL = '1' then
         PC_Updated <= PC;
     end if;
-    Instruction_Register <= Data_OUT;
+    
+    if reset = '0' and PC(15 downto 10) = "000000" then
+        Instruction_Register <= Data_OUT_ROM;
+    elsif reset = '0' then
+        Instruction_Register <= Data_OUT_RAM;
+    end if;
+    
   end process;
 end Behavioral;

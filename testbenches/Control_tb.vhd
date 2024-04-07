@@ -121,13 +121,12 @@ BEGIN
     -- Initialize Inputs
     wait for clk_period*2; 
     rst <= '0';  -- Release reset
-    wait for clk_period;  -- Wait for reset to propagate
  
     INPUT_SIGNAL <= X"0001";
     wait for clk_period;
     INPUT_SIGNAL <= X"0001";
     wait for clk_period;
-    INPUT_SIGNAL <= X"0001";
+    INPUT_SIGNAL <= X"0400";
     wait for clk_period;
     INPUT_SIGNAL <= X"000a";
     WAIT; -- Wait forever; the simulation will stop here
