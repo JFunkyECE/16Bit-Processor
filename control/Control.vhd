@@ -837,8 +837,8 @@ begin
         --
         -- CPU Flags
         --
-            zero_flag => '0',
-            negative_flag => '0',
+            zero_flag => Zero_Negative(1),
+            negative_flag => Zero_Negative(0),
             overflow_flag => '0',
         
         --
