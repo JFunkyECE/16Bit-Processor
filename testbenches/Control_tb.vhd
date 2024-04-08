@@ -19,9 +19,13 @@ ARCHITECTURE behavior OF Control_tb  IS
     SIGNAL rst : STD_LOGIC := '1'; 
     
     SIGNAL INPUT_SIGNAL : STD_LOGIC_VECTOR(15 downto 0) := X"0000";   
-    
     SIGNAL DEBUG : STD_LOGIC := '0';
     SIGNAL board_clock: std_logic := '0';
+    SIGNAL OUTPUT_SIGNAL : STD_LOGIC;
+    SIGNAL load : STD_LOGIC;
+    SIGNAL led_segments : STD_LOGIC_VECTOR(6 downto 0);
+    SIGNAL led_digits : STD_LOGIC_VECTOR(3 downto 0);
+
 --    SIGNAL forwardedoutA : STD_LOGIC_VECTOR(15 downto 0);
 --    SIGNAL forwardedoutB : STD_LOGIC_VECTOR(15 downto 0);
 --    SIGNAL Decode_to_forward_A : STD_LOGIC_VECTOR(15 downto 0);
@@ -30,9 +34,15 @@ ARCHITECTURE behavior OF Control_tb  IS
     PORT(
       clk : in STD_LOGIC;
       rst : in STD_LOGIC;
+      load : in STD_LOGIC;
     
       --inputs
-      INPUT_SIGNAL : in STD_LOGIC_VECTOR(15 downto 0);
+      INPUT_SIGNAL : in STD_LOGIC_VECTOR(15 downto 6); --change to 15 downto 6;
+      OUTPUT_SIGNAL : out STD_LOGIC;
+        
+        
+      led_segments : out STD_LOGIC_VECTOR( 6 downto 0 );
+      led_digits : out STD_LOGIC_VECTOR( 3 downto 0 );
       debug_console : in STD_LOGIC;
       board_clock: in std_logic;
        
@@ -62,8 +72,12 @@ BEGIN
           clk => clk,
           rst => rst,
           INPUT_SIGNAL => INPUT_SIGNAL,
+          OUTPUT_SIGNAL => OUTPUT_SIGNAL,
           debug_console => DEBUG,
-          board_clock => board_clock
+          board_clock => board_clock,
+          load => load,
+          led_segments => led_segments,
+          led_digits => led_digits
           
         );
  
@@ -73,15 +87,7 @@ BEGIN
     -- Initialize Inputs
     wait for clk_period*2; 
     rst <= '0';  -- Release reset
- 
-    INPUT_SIGNAL <= X"0001";
-    wait for clk_period;
-    INPUT_SIGNAL <= X"0001";
-    wait for clk_period;
-    INPUT_SIGNAL <= X"0400";
-    wait for clk_period;
-    INPUT_SIGNAL <= X"000a";
-    WAIT; -- Wait forever; the simulation will stop here
+
 
     END PROCESS;
 END behavior;
