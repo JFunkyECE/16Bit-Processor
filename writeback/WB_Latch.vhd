@@ -21,8 +21,7 @@ entity Writeback_latch is
   -- for load
   WB_LOAD_DATA : in STD_LOGIC_VECTOR(15 downto 0);
   
- --temporary ports
- INPORT : IN STD_LOGIC_VECTOR(15 downto 0);
+  output_port : out STD_LOGIC_VECTOR(15 downto 0);
   
   --outputs
   WB_R_out_data_OUT : out STD_LOGIC_VECTOR(15 downto 0);
@@ -46,10 +45,15 @@ begin
                         WB_R_out_data_OUT <= WB_LOAD_DATA;
                         WB_R_out_address_OUT <= WB_R_out_address_IN;
                         WB_Enable_OUT <= '1';
+            elsif WB_Opcode_IN = "0100000" then --OUT instruction
+                        output_port <= WB_R_out_data_IN;  
+                        WB_R_out_data_OUT <= WB_R_out_data_IN;
+                        WB_R_out_address_OUT <= WB_R_out_address_IN;
+                        WB_Enable_OUT <= WB_Enable_IN;            
             else
-                WB_R_out_data_OUT <= WB_R_out_data_IN;
-                WB_R_out_address_OUT <= WB_R_out_address_IN;
-                WB_Enable_OUT <= WB_Enable_IN;          
+                        WB_R_out_data_OUT <= WB_R_out_data_IN;
+                        WB_R_out_address_OUT <= WB_R_out_address_IN;
+                        WB_Enable_OUT <= WB_Enable_IN;          
             end if;
         end if;
         end process;

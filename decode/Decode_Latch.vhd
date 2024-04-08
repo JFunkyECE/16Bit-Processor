@@ -5,7 +5,6 @@ entity Decode_Latch is
   Port (
     clk : in STD_LOGIC;
     branch_taken : in STD_LOGIC;
-    stage_clear : in STD_LOGIC;
     --inputs
     DC_R_data1_IN : in STD_LOGIC_VECTOR(15 downto 0);
     DC_R_data2_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -61,7 +60,7 @@ begin
         if rising_edge(clk) or branch_taken = '1'  then
             
             if STALL_IN = '0' then
-                if branch_taken = '1' or stage_clear = '1' then
+                if branch_taken = '1' then
                     DC_Opcode_OUT <= "0000000";
                     DC_Write_Enable_OUT <= '0';
                     DC_R_data1_OUT <= DC_R_data1_IN;
@@ -97,7 +96,7 @@ begin
                     end if;
                     
                     -- will have to get opcode = 70 added for br.sub since r7 is written to
-                    if DC_Opcode_IN = "0000001" or DC_Opcode_IN = "0000010" or DC_Opcode_IN = "0000011" or DC_Opcode_IN = "0000100" or DC_Opcode_IN = "0000101" or DC_Opcode_IN = "0000110" or DC_Opcode_IN = "0010010" or DC_Opcode_IN = "0010011" or DC_Opcode_IN = "0100001" then
+                    if DC_Opcode_IN = "0000001" or DC_Opcode_IN = "0000010" or DC_Opcode_IN = "0000011" or DC_Opcode_IN = "0000100" or DC_Opcode_IN = "0000101" or DC_Opcode_IN = "0000110" or DC_Opcode_IN = "0010010" or DC_Opcode_IN = "0010011" or DC_Opcode_IN = "0100001" or DC_Opcode_IN = "1000110" then
                         DC_Write_Enable_OUT <= '1';
                         DC_LOAD_OUT <= '0';
                     elsif DC_Opcode_IN = "0010000" then              

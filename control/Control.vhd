@@ -7,34 +7,16 @@ entity Control is
   Port (
   clk : in STD_LOGIC;
   rst : in STD_LOGIC;
+  load : in STD_LOGIC;
 
   --inputs
-  INPUT_SIGNAL : in STD_LOGIC_VECTOR(15 downto 0);
+  INPUT_SIGNAL : in STD_LOGIC_VECTOR(15 downto 6); --change to 15 downto 6;
+  OUTPUT_SIGNAL : out STD_LOGIC;
+  
+  
+  led_segments : out STD_LOGIC_VECTOR( 6 downto 0 );
+  led_digits : out STD_LOGIC_VECTOR( 3 downto 0 );
 
---  --outputs
---  data : out STD_LOGIC_VECTOR(15 downto 0);
---  ALU_DATA_OUT : out STD_LOGIC_VECTOR(15 downto 0);
---  read_data1 : out STD_LOGIC_VECTOR(15 downto 0); --for debug
---  read_data2 : out STD_LOGIC_VECTOR(15 downto 0); --for debug
---  read_index1 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
---  read_index2 : out STD_LOGIC_VECTOR(2 downto 0); --for debug
---  data_addr_Out : out STD_LOGIC_VECTOR(2 downto 0); --for debug
---  data_Out : out STD_LOGIC_VECTOR(15 downto 0); --For debug
-
---  f_pc : out STD_LOGIC_VECTOR(15 downto 0); 
---  f_opcode : out STD_LOGIC_VECTOR(6 downto 0);
-  
---  dc_pc : out STD_LOGIC_VECTOR(15 downto 0);
---  dc_displacement : out STD_LOGIC_VECTOR(15 downto 0);
-  
---  ex_branchsel : out STD_LOGIC;
---  ex_data_out : out STD_LOGIC_VECTOR(15 downto 0);
-  
---  writeback_data : out STD_LOGIC_VECTOR(15 downto 0);
---  writeback_addr : out STD_LOGIC_VECTOR(2 downto 0);
---  writeback_enable : out STD_LOGIC;
---  writeback_PC2 : out STD_LOGIC_VECTOR(15 downto 0);
---  writeback_opcode : out STD_LOGIC_VECTOR(6 downto 0);
   debug_console : in STD_LOGIC;
   board_clock: in std_logic;
  
@@ -157,7 +139,6 @@ architecture Behavioral of Control is
     signal DC_EX_IMM : STD_LOGIC_VECTOR(7 downto 0);
     signal DC_EX_M1 : STD_LOGIC;
     
-    signal b_return : STD_LOGIC;
     
     signal F_DC_INPORT : STD_LOGIC_VECTOR(15 downto 0);
     signal DC_ALU_INPORT : STD_LOGIC_VECTOR(15 downto 0);
@@ -183,6 +164,8 @@ architecture Behavioral of Control is
     signal r5 : STD_LOGIC_VECTOR(15 downto 0);
     signal r6 : STD_LOGIC_VECTOR(15 downto 0);
     signal r7 : STD_LOGIC_VECTOR(15 downto 0);
+    
+    signal OP_signal_wb : STD_LOGIC_VECTOR(15 downto 0);
 
     COMPONENT ALU
         port(
@@ -212,7 +195,6 @@ architecture Behavioral of Control is
             WB_R_out_data_IN : in STD_LOGIC_VECTOR(15 downto 0);
             WB_R_out_address_IN : in STD_LOGIC_VECTOR(2 downto 0);
             WB_Enable_IN : in STD_LOGIC;
-            INPORT : IN STD_LOGIC_VECTOR(15 downto 0);
  
             WB_PC2 : in STD_LOGIC_VECTOR(15 downto 0);
             WB_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
@@ -222,6 +204,8 @@ architecture Behavioral of Control is
             WB_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             -- for load
             WB_LOAD_DATA : in STD_LOGIC_VECTOR(15 downto 0);
+            output_port : out STD_LOGIC_VECTOR(15 downto 0);
+
             --outputs
             WB_R_out_data_OUT : out STD_LOGIC_VECTOR(15 downto 0);
             WB_R_out_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
@@ -270,7 +254,6 @@ architecture Behavioral of Control is
         port(
             clk : in STD_LOGIC;
             branch_taken : in STD_LOGIC;
-            stage_clear : in STD_LOGIC;
             --inputs
             DC_R_data1_IN : in STD_LOGIC_VECTOR(15 downto 0);
             DC_R_data2_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -328,9 +311,8 @@ architecture Behavioral of Control is
             rst : in std_logic;
             Opcode : in std_logic_vector(6 downto 0);
             ZN_Flags : in std_logic_vector(1 downto 0);
-            BR_Select: out std_logic;
-            BR_Return_Clear : out std_logic
-        );
+            BR_Select: out std_logic
+            );
     end COMPONENT;
 
     COMPONENT Register_Select
@@ -437,10 +419,9 @@ architecture Behavioral of Control is
         port(
             clk : IN std_logic;   
             reset : IN std_logic;
+            load : IN std_logic;
             PC_IN : IN std_logic_vector(15 downto 0);
-            PC_OUT : OUT std_logic_vector(15 downto 0);
-            DC_Opcode : IN std_logic_vector(6 downto 0);
-            DC_R7 : IN std_logic_vector(15 downto 0)
+            PC_OUT : OUT std_logic_vector(15 downto 0)
         );
     end COMPONENT;
 
@@ -638,7 +619,19 @@ architecture Behavioral of Control is
         );
     end component;
    
-
+    component led_display is
+        Port (
+    
+            addr_write : in  STD_LOGIC_VECTOR (15 downto 0);
+            clk : in  STD_LOGIC;
+            data_in : in  STD_LOGIC_VECTOR (15 downto 0);
+            en_write : in  STD_LOGIC;
+    
+            board_clock : in STD_LOGIC;
+            led_segments : out STD_LOGIC_VECTOR( 6 downto 0 );
+            led_digits : out STD_LOGIC_VECTOR( 3 downto 0 )
+        );
+    end component;
 
 begin    
 
@@ -647,7 +640,9 @@ begin
                                        F_R_out_address_OUT => R_out_address_F, F_shift_OUT => shift_F,
                                        PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC,
                                        F_IMM => F_DC_IMM, F_M1=> F_DC_M1, F_INPORT_OUT=> F_DC_INPORT,
-                                       INPORT => INPUT_SIGNAL, F_INST => F_INST1 ); 
+                                       INPORT(15 downto 6) => INPUT_SIGNAL, 
+                                       INPORT(5 downto 0) => "000000",
+                                        F_INST => F_INST1 ); 
                                        
    Hazard_Unit_INST : Hazard_Unit port map(rst => rst, DC_EX_Rout_addr_IN => R_out_address_DC_EX, DC_EX_LOAD_EN_IN => LOAD_ENABLE_DC, REG_SELECT_DC_R1_addr_IN => R_Select1, 
                                            REG_SELECT_DC_R2_addr_IN => R_Select2, F_DC_OPCODE_IN => Opcode_F, DC_EX_OPCODE_IN => Opcode_DC,
@@ -665,7 +660,7 @@ begin
                                             DC_LOAD_OUT => LOAD_ENABLE_DC, STALL_IN => STALL_OUT,
                                             DC_Displacement_IN => F_Displacement, DC_Displacement_OUT => Displacement_DC_EX, 
                                             DC_PC_IN => Fetch_PC, DC_PC_OUT =>PC_DC_EX, D_M1=> F_DC_M1,  D_IMM => F_DC_IMM, 
-                                            D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel, stage_clear => b_return,
+                                            D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel,
                                             DC_INPORT_IN => F_DC_INPORT, DC_INPORT_OUT => DC_ALU_INPORT,
                                             DC_INST_IN => F_INST1, DC_INST_OUT => DC_INST);
                                             
@@ -691,9 +686,10 @@ begin
     WB_Latch_INST : Writeback_Latch port map(clk=>clk, WB_R_out_data_IN => Data_EX_WB,
                                             WB_R_out_address_IN => Data_Addr_EX_WB, WB_Enable_IN => Write_Enable_EX_WB,
                                             WB_R_out_data_OUT => WB_R_outdata_OUT, WB_R_out_address_OUT => WB_R_outaddress_OUT,
-                                            WB_Enable_OUT => WB_EN_OUT, INPORT => INPUT_SIGNAL,
+                                            WB_Enable_OUT => WB_EN_OUT,
                                             WB_PC2 => EX_WB_PC, WB_Opcode_IN => Opcode_EX_WB, WB_Opcode_OUT => WB_OP_OUT,
-                                            WB_LOAD_DATA => douta_RAM, WB_INST_IN => EX_INST , WB_INST_OUT => WB_INST);
+                                            WB_LOAD_DATA => douta_RAM, WB_INST_IN => EX_INST , WB_INST_OUT => WB_INST,
+                                            output_port => OP_signal_wb);
 
     ALU_INST : ALU port map(A => Forward_ALU_data1, B => Forward_ALU_data2, OpCode => OpCode_DC, Shift_value => Shift_DC,
                             C => R_data_ALU_OUT, Zero_Negative_flags => Zero_Negative, M_EX =>DC_EX_M1 ,IMM_EX=>DC_EX_IMM,
@@ -707,7 +703,7 @@ begin
     Fetch_INST : Fetch port map(clk  => clk, reset => rst, PC => PC_OUT, PC_Updated => PC_Updated, Data_OUT_ROM => Instruction_OUT_ROM, Instruction_Register => IR,
                                 branch_select => branch_sel, branch_PC => Data_EX_WB, PC_STALL =>PC_WRITE_OUT, Data_OUT_RAM => Instruction_OUT_RAM);
     
-    PC_INST : Program_Counter port map(clk => clk, reset => rst, PC_IN => PC_Updated, PC_OUT => PC_OUT, DC_Opcode => Opcode_DC, DC_R7 => R_data1_DC);
+    PC_INST : Program_Counter port map(clk => clk, reset => rst, PC_IN => PC_Updated, PC_OUT => PC_OUT, load => load);
     
     ROM_INST : ROM port map(clka_ROM => clk, rsta_ROM => rst, addra_ROM => PC_OUT(9 downto 1) , douta_ROM => Instruction_OUT_ROM);
     
@@ -721,32 +717,12 @@ begin
     REG_SEL_INST : Register_Select port map(rst => rst, R_IN_1 => R_in1_address_F , R_IN_2 => R_in2_address_F ,R_dest => R_out_address_F, Opcode => Opcode_F ,R1_OUT =>R_Select1,
                                             R2_OUT => R_Select2);
     
-    BR_SEL_INST : Branch_Select port map(rst => rst, Opcode => OpCode_DC, ZN_Flags => Zero_Negative, BR_Select => Branch_Sel_EX, BR_Return_Clear => b_return ); 
+    BR_SEL_INST : Branch_Select port map(rst => rst, Opcode => OpCode_DC, ZN_Flags => Zero_Negative, BR_Select => Branch_Sel_EX); 
 
     RAM_CTRL_INST : RAM_Control port map(rst => rst, Opcode => Opcode_EX_WB, source_in => source_data_RAM , destination_in => destination_data_RAM , write_enable_ram => wea_RAM, 
                                          addr_in_ram => addra_RAM,data_in_ram => dina_RAM );
 
---        data <= IR;
---        ALU_DATA_OUT <= Data_EX_WB;
---        read_data1 <= r1_data;
---        read_data2 <= r2_data;
---        read_index1 <= R_in1_address_F;
---        read_index2 <= R_in2_address_F;
---        data_addr_Out <= WB_R_outaddress_OUT;
---        data_Out <= WB_R_outdata_OUT;
-        
---        f_pc <= Fetch_PC;
---        f_opcode <=  Opcode_F;
---        dc_pc <= PC_DC_EX;
---        dc_displacement <= Displacement_DC_EX;
---        ex_branchsel <= branch_sel;
---        ex_data_out <= Data_EX_WB;
-        
---        writeback_data <= WB_R_outdata_OUT;
---        writeback_addr <= WB_R_outaddress_OUT;
---        writeback_enable <= WB_EN_OUT;
---        writeback_PC2 <= EX_WB_PC;
---        writeback_opcode <= WB_OP_OUT;
+
         
         
      console_display : console port map(
@@ -867,4 +843,20 @@ begin
             vga_blue => vga_blue
         );
         
+        
+     led_display_memory : led_display
+     port map (
+        
+                addr_write => destination_data_RAM,
+                clk => clk,
+                data_in => douta_RAM ,
+                en_write => wea_RAM(0), --connect to ram enable 
+                board_clock => board_clock,
+                led_segments => led_segments,
+                led_digits => led_digits
+            );
+   
+   
+     OUTPUT_SIGNAL <= OP_signal_wb(0);
+   
 end Behavioral;

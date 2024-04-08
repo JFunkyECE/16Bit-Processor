@@ -147,6 +147,8 @@ begin
                 when "1000110" =>  -- OpCode = 70 for subroutine branch
                     result_signed := add1(a_signed, b_signed);
                     mux_out := std_logic_vector(result_signed); 
+                when "1000111" => -- Opcode = 71 for return 
+                    mux_out := A;
                 when "0010000" =>   -- Opcode = 16 for load instruction
                     mux_out := std_logic_vector(A); 
                 when "0010010" => -- Opcode = 18 loadimmediate instruction
@@ -157,8 +159,10 @@ begin
                     end if;
                 when "0010011" => -- Opcode = 19 MOV
                     mux_out := A;
-                when "0100001" =>
+                when "0100001" => -- Opcode = 33 inport
                     mux_out := IN_PORT;
+                when "0100000" => -- Opcode = 32 outport
+                    mux_out := A;
                 when others =>
                     mux_out := (others => '0'); -- Default case
              end case;

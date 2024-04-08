@@ -42,6 +42,9 @@ begin
         elsif Opcode = "0000111" then --TEST operation
             R1_OUT <= R_dest;
             R2_OUT <= R_IN_2;
+        elsif Opcode = "0100000" then
+            R1_OUT <= R_dest;
+            R2_OUT <= R_IN_2;
         else
             R1_OUT <= R_IN_1;
             R2_OUT <= R_IN_2;
