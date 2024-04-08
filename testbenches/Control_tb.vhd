@@ -18,7 +18,7 @@ ARCHITECTURE behavior OF Control_tb  IS
  
     SIGNAL rst : STD_LOGIC := '1'; 
     
-    SIGNAL INPUT_SIGNAL : STD_LOGIC_VECTOR(15 downto 0) := X"0000";   
+    SIGNAL INPUT_SIGNAL : STD_LOGIC_VECTOR(9 downto 0) := "0000000000";   
     SIGNAL DEBUG : STD_LOGIC := '0';
     SIGNAL board_clock: std_logic := '0';
     SIGNAL OUTPUT_SIGNAL : STD_LOGIC;

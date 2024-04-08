@@ -24,21 +24,21 @@ LedDisplay:	equ		0xFFF2
 ; Word addressable constants for ram starting a 0x400
 ;
 
-;RamStart:	equ		0x0400
-;BootVector:	equ		0x0400
-;BootVector_1:	equ		0x0401
-;BootVector_2:	equ		0x0402
-;StepSize:	equ		0x0001
+RamStart:	equ		0x0400
+BootVector:	equ		0x0400
+BootVector_1:	equ		0x0401
+BootVector_2:	equ		0x0402
+StepSize:	equ		0x0001
 
 ;
 ; Byte addressable constants for ram starting a 0x800
 ;
 
-RamStart:	equ		0x0800
-BootVector:	equ		0x0800
-BootVector_1:	equ		0x0802
-BootVector_2:	equ		0x0804
-StepSize:	equ		0x0002
+;RamStart:	equ		0x0800
+;BootVector:	equ		0x0800
+;BootVector_1:	equ		0x0802
+;BootVector_2:	equ		0x0804
+;StepSize:	equ		0x0002
 
 
 

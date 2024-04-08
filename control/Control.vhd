@@ -254,6 +254,7 @@ architecture Behavioral of Control is
         port(
             clk : in STD_LOGIC;
             branch_taken : in STD_LOGIC;
+            branch_clear : in STD_LOGIC;
             --inputs
             DC_R_data1_IN : in STD_LOGIC_VECTOR(15 downto 0);
             DC_R_data2_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -373,7 +374,7 @@ architecture Behavioral of Control is
     COMPONENT Fetch_Latch
         port(
             clk : in STD_LOGIC;           
-
+            rst : in STD_LOGIC;
             --inputs
             Instruction : IN STD_LOGIC_VECTOR(15 downto 0);     
             F_INST : OUT STD_LOGIC_VECTOR(15 downto 0);
@@ -635,7 +636,7 @@ architecture Behavioral of Control is
 
 begin    
 
-    F_Latch_INST: Fetch_Latch port map(clk=>clk, Instruction => IR, F_OpcodeOut => Opcode_F,
+    F_Latch_INST: Fetch_Latch port map(clk=>clk, rst => rst,Instruction => IR, F_OpcodeOut => Opcode_F,
                                        F_R_in1_address_OUT => R_in1_address_F, F_R_in2_address_OUT => R_in2_address_F,
                                        F_R_out_address_OUT => R_out_address_F, F_shift_OUT => shift_F,
                                        PC_IN => PC_OUT, F_displacementl => displacementL, F_displacements => displacementS , F_PC => Fetch_PC,
@@ -662,7 +663,7 @@ begin
                                             DC_PC_IN => Fetch_PC, DC_PC_OUT =>PC_DC_EX, D_M1=> F_DC_M1,  D_IMM => F_DC_IMM, 
                                             D_EX_M1 => DC_EX_M1, D_EX_IMM =>DC_EX_IMM, branch_taken => branch_sel,
                                             DC_INPORT_IN => F_DC_INPORT, DC_INPORT_OUT => DC_ALU_INPORT,
-                                            DC_INST_IN => F_INST1, DC_INST_OUT => DC_INST);
+                                            DC_INST_IN => F_INST1, DC_INST_OUT => DC_INST, branch_clear => Branch_Sel_EX);
                                             
 
     Forwarding_Unit_INST : Forwarding_Unit port map(Forward_EX_IN => Data_EX_WB, Forward_WB_IN => WB_R_outdata_OUT, Forward_DC_data1_IN => R_data1_DC,
@@ -722,8 +723,8 @@ begin
     RAM_CTRL_INST : RAM_Control port map(rst => rst, Opcode => Opcode_EX_WB, source_in => source_data_RAM , destination_in => destination_data_RAM , write_enable_ram => wea_RAM, 
                                          addr_in_ram => addra_RAM,data_in_ram => dina_RAM );
 
-
-        
+ 
+         
         
      console_display : console port map(
         --

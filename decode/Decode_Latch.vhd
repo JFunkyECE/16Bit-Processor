@@ -5,6 +5,7 @@ entity Decode_Latch is
   Port (
     clk : in STD_LOGIC;
     branch_taken : in STD_LOGIC;
+    branch_clear : in STD_LOGIC;
     --inputs
     DC_R_data1_IN : in STD_LOGIC_VECTOR(15 downto 0);
     DC_R_data2_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -56,11 +57,11 @@ begin
     
     process(clk)
     begin
-     
-        if rising_edge(clk) or branch_taken = '1'  then
-            
+       
+      --  if rising_edge(clk) or branch_taken = '1'  then
+          if rising_edge(clk) then  
             if STALL_IN = '0' then
-                if branch_taken = '1' then
+                if branch_taken = '1' or branch_clear = '1' then
                     DC_Opcode_OUT <= "0000000";
                     DC_Write_Enable_OUT <= '0';
                     DC_R_data1_OUT <= DC_R_data1_IN;
