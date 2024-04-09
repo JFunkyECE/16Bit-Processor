@@ -729,16 +729,16 @@ begin
      console_display : console port map(
         --
         --
-        -- Stage 1 Fetch
-        --
+        -- Stage 1 Fetch  
+        --   
             s1_pc => PC_OUT,
-            s1_inst => F_INST1 ,
+            s1_inst => F_INST1 , 
         
         --
         -- Stage 2 Decode
         --
         
-            s2_pc => PC_DC_EX,
+            s2_pc => PC_DC_EX, 
             s2_inst => DC_INST,
         
             s2_reg_a => R_out_address_DC_EX,
@@ -772,13 +772,15 @@ begin
             s3_br_wb => '0',
             s3_br_wb_address => x"0000",
         
-            s3_mr_wr => '0',
-            s3_mr_wr_address => x"0000",
-            s3_mr_wr_data => x"0000",
+            s3_mr_wr => wea_RAM(0),
+            s3_mr_wr_address(8 downto 0) => addra_RAM,
+            s3_mr_wr_address(15 downto 9) => "0000000",
+            s3_mr_wr_data => dina_RAM,
         
             s3_mr_rd => '0',
             s3_mr_rd_address => x"0000",
         
+         
         --
         -- Stage 4 Memory
         --

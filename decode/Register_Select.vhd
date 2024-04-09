@@ -21,14 +21,14 @@ begin
 
    process(R_IN_1, R_dest, Opcode, rst)
     begin
-        if rst = '1' then
+        if rst = '1' then   
             R1_OUT <= R_IN_1;
             R2_OUT <= R_IN_2;
         elsif Opcode = "1000011" or Opcode = "1000100" or Opcode = "1000101" or Opcode = "1000110" then --branch instructions for RA
             R1_OUT <= R_dest;
             R2_OUT <= R_IN_1;
         elsif Opcode = "1000111" then --return from branch subroutine
-            R1_OUT <= "111";
+            R1_OUT <= "111"; 
             R2_OUT <= R_IN_2;
         elsif Opcode = "0010000" then --LOAD operation
             R1_OUT <= R_dest;

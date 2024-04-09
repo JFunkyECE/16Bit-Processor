@@ -26,7 +26,7 @@ entity Forwarding_Unit is
   );
 end Forwarding_Unit;
 
-architecture Behavioral of Forwarding_Unit is
+architecture Behavioral of Forwarding_Unit is 
 begin
     -- Forwarding logic
     process(Opcode, PC, Displacement, Forward_DC_Write_Enable_IN, Forward_EX_Write_Enable_IN, Forward_WB_Enable_IN, Forward_EX_Rout_IN, Forward_DC_Rin1_IN, Forward_DC_Rin2_IN, Forward_EX_IN, Forward_DC_data1_IN, Forward_DC_data2_IN, Forward_WB_Rout_IN, Forward_WB_IN)
