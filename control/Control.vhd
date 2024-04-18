@@ -1,6 +1,6 @@
 library IEEE;
 
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_1164.ALL; 
 
 
 entity Control is
@@ -8,6 +8,7 @@ entity Control is
   clk : in STD_LOGIC;
   rst : in STD_LOGIC;
   load : in STD_LOGIC;
+  switch : in STD_LOGIC_VECTOR(2 downto 0);
 
   --inputs
   INPUT_SIGNAL : in STD_LOGIC_VECTOR(15 downto 6); --change to 15 downto 6;
@@ -35,7 +36,7 @@ end Control;
  
 
 architecture Behavioral of Control is   
-
+ 
     --signals for fetch
     signal Opcode_F : STD_LOGIC_VECTOR(6 downto 0);
     signal R_in1_address_F : STD_LOGIC_VECTOR(2 downto 0);
@@ -165,6 +166,9 @@ architecture Behavioral of Control is
     signal r6 : STD_LOGIC_VECTOR(15 downto 0);
     signal r7 : STD_LOGIC_VECTOR(15 downto 0);
     
+    --dipswitch select signal
+    signal dipselect : std_logic;
+    
     signal OP_signal_wb : STD_LOGIC_VECTOR(15 downto 0);
 
     COMPONENT ALU
@@ -205,6 +209,9 @@ architecture Behavioral of Control is
             -- for load
             WB_LOAD_DATA : in STD_LOGIC_VECTOR(15 downto 0);
             output_port : out STD_LOGIC_VECTOR(15 downto 0);
+            
+            dipswitchselect : in std_logic;
+            diswitchvalue : in std_logic_vector(2 downto 0);
 
             --outputs
             WB_R_out_data_OUT : out STD_LOGIC_VECTOR(15 downto 0);
@@ -483,6 +490,7 @@ architecture Behavioral of Control is
             Opcode : IN std_logic_vector(6 downto 0);
             source_in : IN std_logic_vector(15 downto 0);
             destination_in : IN std_logic_vector(15 downto 0);
+            dipswitch : out std_logic;
             
             write_enable_ram : OUT std_logic_vector(0 downto 0);
             addr_in_ram : OUT std_logic_vector(8 downto 0);
@@ -682,7 +690,7 @@ begin
                                            EX_Branch_Select_IN => Branch_Sel_EX , EX_Branch_Select_OUT => branch_sel,
                                            EX_PC_IN => PC_DC_EX , EX_PC_OUT => EX_WB_PC, EX_SOURCE_IN => Forward_ALU_data2,
                                            EX_DESTINATION_IN => Forward_ALU_data1, EX_SOURCE_OUT => source_data_RAM , EX_DESTINATION_OUT => destination_data_RAM,
-                                           EX_INST_IN => DC_INST, EX_INST_OUT => EX_INST, EX_PC => PC_EXECUTE);    
+                                           EX_INST_IN => DC_INST, EX_INST_OUT =>  EX_INST, EX_PC => PC_EXECUTE);    
 
     WB_Latch_INST : Writeback_Latch port map(clk=>clk, WB_R_out_data_IN => Data_EX_WB,
                                             WB_R_out_address_IN => Data_Addr_EX_WB, WB_Enable_IN => Write_Enable_EX_WB,
@@ -690,7 +698,7 @@ begin
                                             WB_Enable_OUT => WB_EN_OUT,
                                             WB_PC2 => EX_WB_PC, WB_Opcode_IN => Opcode_EX_WB, WB_Opcode_OUT => WB_OP_OUT,
                                             WB_LOAD_DATA => douta_RAM, WB_INST_IN => EX_INST , WB_INST_OUT => WB_INST,
-                                            output_port => OP_signal_wb);
+                                            output_port => OP_signal_wb, diswitchvalue => switch, dipswitchselect => dipselect);
 
     ALU_INST : ALU port map(A => Forward_ALU_data1, B => Forward_ALU_data2, OpCode => OpCode_DC, Shift_value => Shift_DC,
                             C => R_data_ALU_OUT, Zero_Negative_flags => Zero_Negative, M_EX =>DC_EX_M1 ,IMM_EX=>DC_EX_IMM,
@@ -721,7 +729,7 @@ begin
     BR_SEL_INST : Branch_Select port map(rst => rst, Opcode => OpCode_DC, ZN_Flags => Zero_Negative, BR_Select => Branch_Sel_EX); 
 
     RAM_CTRL_INST : RAM_Control port map(rst => rst, Opcode => Opcode_EX_WB, source_in => source_data_RAM , destination_in => destination_data_RAM , write_enable_ram => wea_RAM, 
-                                         addr_in_ram => addra_RAM,data_in_ram => dina_RAM );
+                                         addr_in_ram => addra_RAM,data_in_ram => dina_RAM, dipswitch => dipselect );
 
  
          
@@ -853,7 +861,7 @@ begin
                 addr_write => destination_data_RAM,
                 clk => clk,
                 data_in => douta_RAM ,
-                en_write => wea_RAM(0), --connect to ram enable 
+                en_write => wea_RAM(0), 
                 board_clock => board_clock,
                 led_segments => led_segments,
                 led_digits => led_digits

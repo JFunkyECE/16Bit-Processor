@@ -23,6 +23,9 @@ entity Writeback_latch is
   
   output_port : out STD_LOGIC_VECTOR(15 downto 0);
   
+  dipswitchselect : in std_logic;
+  diswitchvalue : in std_logic_vector(2 downto 0);
+  
   --outputs
   WB_R_out_data_OUT : out STD_LOGIC_VECTOR(15 downto 0);
   WB_R_out_address_OUT : out STD_LOGIC_VECTOR(2 downto 0);
@@ -42,9 +45,15 @@ begin
                         WB_R_out_address_OUT <= "111";
                         WB_Enable_OUT <= '1';
             elsif WB_Opcode_IN = "0010000" then --load instruction
+                if dipswitchselect = '0' then
                         WB_R_out_data_OUT <= WB_LOAD_DATA;
                         WB_R_out_address_OUT <= WB_R_out_address_IN;
                         WB_Enable_OUT <= '1';
+                else
+                        WB_R_out_data_OUT <= "0000000000000" & diswitchvalue;
+                        WB_R_out_address_OUT <= WB_R_out_address_IN;
+                        WB_Enable_OUT <= '1';
+                end if;
             elsif WB_Opcode_IN = "0100000" then --OUT instruction
                         output_port <= WB_R_out_data_IN;  
                         WB_R_out_data_OUT <= WB_R_out_data_IN;
