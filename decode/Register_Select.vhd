@@ -1,6 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- This file selects the proper address fields to read
+-- into the register file depending on the type of instruction.
 
 entity Register_Select is
   Port ( 

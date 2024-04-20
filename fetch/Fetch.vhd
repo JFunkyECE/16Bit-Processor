@@ -8,7 +8,6 @@ entity Fetch is
     reset : IN std_logic;
     PC : IN std_logic_vector(15 downto 0); --read from program counter register
     PC_Updated : OUT std_logic_vector(15 downto 0); --holds updated PC value after incrementing by 2 or getting branch instruction
-    
     Data_OUT_ROM : IN std_logic_vector(15 downto 0); 
     Data_OUT_RAM : IN std_logic_vector(15 downto 0);
     Instruction_Register : OUT std_logic_vector(15 downto 0);
@@ -42,6 +41,7 @@ begin
         PC_Updated <= PC;
     end if;
     
+    --decodes between ROM and RAM
     if reset = '0' and PC(15 downto 10) = "000000" then
         Instruction_Register <= Data_OUT_ROM;
     elsif reset = '0' then

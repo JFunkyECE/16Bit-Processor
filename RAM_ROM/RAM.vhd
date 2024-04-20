@@ -3,7 +3,7 @@ Library xpm;
 use xpm.vcomponents.all;
 use IEEE.STD_LOGIC_1164.ALL;
 
-
+-- 1024 byte dual port ram
 
 entity RAM is
   Port ( 

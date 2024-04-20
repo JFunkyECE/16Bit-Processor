@@ -15,14 +15,17 @@ entity Writeback_latch is
   WB_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
   WB_Opcode_OUT : out STD_LOGIC_VECTOR(6 downto 0);
   
+  -- for console
   WB_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
   WB_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0);
   
   -- for load
   WB_LOAD_DATA : in STD_LOGIC_VECTOR(15 downto 0);
   
+  -- for output port
   output_port : out STD_LOGIC_VECTOR(15 downto 0);
   
+  -- for factorial testbench
   dipswitchselect : in std_logic;
   diswitchvalue : in std_logic_vector(2 downto 0);
   

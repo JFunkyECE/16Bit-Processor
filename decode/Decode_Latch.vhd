@@ -15,9 +15,7 @@ entity Decode_Latch is
     DC_Opcode_IN : in STD_LOGIC_VECTOR(6 downto 0);
     DC_Shift_IN : in STD_LOGIC_VECTOR(3 downto 0);
     STALL_IN : in STD_LOGIC; 
-    
     DC_INST_IN : in STD_LOGIC_VECTOR(15 downto 0);
-    DC_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0);
     
     --new signals
     DC_Displacement_IN : in STD_LOGIC_VECTOR(15 downto 0);
@@ -44,7 +42,8 @@ entity Decode_Latch is
     DC_Write_Enable_OUT : out STD_LOGIC;
     DC_LOAD_OUT : out STD_LOGIC; --new output for mem read
     DC_Opcode_OUT : out STD_LOGIC_VECTOR(6 downto 0);
-    DC_Shift_OUT : out STD_LOGIC_VECTOR(3 downto 0)
+    DC_Shift_OUT : out STD_LOGIC_VECTOR(3 downto 0);
+    DC_INST_OUT : out STD_LOGIC_VECTOR(15 downto 0)
   );
 
 end Decode_Latch;
@@ -57,9 +56,7 @@ begin
     
     process(clk)
     begin
-       
-      --  if rising_edge(clk) or branch_taken = '1'  then
-          if rising_edge(clk) then  
+         if rising_edge(clk) then  
             if STALL_IN = '0' then
                 if branch_taken = '1' or branch_clear = '1' then
                     DC_Opcode_OUT <= "0000000";

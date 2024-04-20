@@ -1,6 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- Depending on a load or store instructions uses proper source for addressing and data ports of the RAM
 
 entity RAM_Control is 
   Port ( 

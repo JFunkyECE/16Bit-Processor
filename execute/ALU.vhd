@@ -7,17 +7,15 @@ use work.AddSubNand.all; -- Include your package
 
 entity ALU is
     port(
-        --clk : in STD_LOGIC;
         A : in STD_LOGIC_VECTOR(15 downto 0); --always a register value
         B : in STD_LOGIC_VECTOR(15 downto 0); --could be a register value or an immediate
         OpCode : in STD_LOGIC_VECTOR(6 downto 0); --used to determine which operation is occuring
         Shift_value : in STD_LOGIC_VECTOR(3 downto 0); --Stores immediate for shifting\
         IN_PORT : in STD_LOGIC_VECTOR(15 downto 0);
-        --for load immediate
-        M_EX : in STD_LOGIC;
-        IMM_EX : in STD_LOGIC_VECTOR(7 downto 0);
+        M_EX : in STD_LOGIC; -- for load immediate instructions
+        IMM_EX : in STD_LOGIC_VECTOR(7 downto 0); -- for load immediate instructions
         
-        C : out STD_LOGIC_VECTOR(15 downto 0); --stores output, CHANGE TO 32 bits
+        C : out STD_LOGIC_VECTOR(15 downto 0); --stores output
 
         Zero_Negative_flags : out STD_LOGIC_VECTOR(1 downto 0) -- lsb is negative, msb is zero
     );

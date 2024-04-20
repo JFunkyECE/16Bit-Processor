@@ -1,14 +1,3 @@
------------------------------------------------------------
---
--- ECE441/ECE543
---
--- logic gate desciption of a half adder
---
--- (c)2022 Dr. D. Capson    Dept. of ECE
---                          University of Victoria
---
------------------------------------------------------------
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 

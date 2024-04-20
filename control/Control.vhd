@@ -2,8 +2,17 @@ library IEEE;
 
 use IEEE.STD_LOGIC_1164.ALL; 
 
+-- CPU FILE
+-- This is the top module for the CPU and interconnects all other
+-- submodules together through signals. Additional signals in here
+-- that are not directly used in computation are for debugging purposes.
+-- Console and LED display code are provided by Brent Sirna. 
 
-entity Control is
+-- Authors
+-- Jacob Funk
+-- Zachary Maidment
+
+entity CPU is
   Port (
   clk : in STD_LOGIC;
   rst : in STD_LOGIC;
@@ -31,11 +40,11 @@ entity Control is
   
   );
 
-end Control;
+end CPU;
 
  
 
-architecture Behavioral of Control is   
+architecture Behavioral of CPU is   
  
     --signals for fetch
     signal Opcode_F : STD_LOGIC_VECTOR(6 downto 0);
@@ -105,9 +114,7 @@ architecture Behavioral of Control is
     signal douta_RAM : STD_LOGIC_VECTOR(15 downto 0);
     signal addrb_RAM : STD_LOGIC_VECTOR(8 downto 0);
     signal doutb_RAM : STD_LOGIC_VECTOR(15 downto 0);
-    
-    --signals for branching operations
-    
+        
     --from fetch latch to decode stage
     signal displacementL : STD_LOGIC_VECTOR(8 downto 0);
     signal displacementS : STD_LOGIC_VECTOR(5 downto 0);
@@ -168,7 +175,6 @@ architecture Behavioral of Control is
     
     --dipswitch select signal
     signal dipselect : std_logic;
-    
     signal OP_signal_wb : STD_LOGIC_VECTOR(15 downto 0);
 
     COMPONENT ALU

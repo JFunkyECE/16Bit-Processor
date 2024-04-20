@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
 
+-- Execute Latch
 
 entity Execute_Latch is
   Port ( 
@@ -52,13 +53,14 @@ begin
                 EX_DESTINATION_OUT <= EX_DESTINATION_IN;
                 EX_SOURCE_OUT <= EX_SOURCE_IN;
                 EX_PC <= EX_PC_IN;
+                
                 if EX_Branch_Select_IN = '1' then
                     EX_write_enable_OUT <= '0';
                     EX_opcodeOut <= "0000000";
                 else
                     EX_write_enable_OUT <= EX_write_enable_IN;
                 end if;
-
+                
                 EX_R_out_address_OUT <= EX_R_out_address_IN;
 
             end if;

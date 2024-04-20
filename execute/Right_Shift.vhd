@@ -11,10 +11,9 @@ entity Right_Shift is
 end Right_Shift;
 
 architecture Behavioral of Right_Shift is
-    -- Intermediate signals for each stage of the shifting process
+
     signal stage1, stage2, stage3, stage4: STD_LOGIC_VECTOR(15 downto 0);
     
-    -- 2-to-1 Multiplexor function
     function mux2to1(input1, input2: STD_LOGIC; select1: STD_LOGIC) return STD_LOGIC is 
     begin
         if select1 = '1' then

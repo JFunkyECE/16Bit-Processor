@@ -11,7 +11,7 @@ entity Left_Shift is
 end Left_Shift;
 
 architecture Behavioral of Left_Shift is
-    -- Intermediate signals for each stage of the shifting process
+
     signal stage1, stage2, stage3, stage4: STD_LOGIC_VECTOR(15 downto 0);
     
     -- 2-to-1 Multiplexor function

@@ -1,6 +1,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- handles stalling the pipeline if a load instruction is followed by an instruction which needs 
+-- data from the load to prevent stale data being read from.
+
 entity Hazard_Unit is
  Port ( 
     rst : in STD_LOGIC;

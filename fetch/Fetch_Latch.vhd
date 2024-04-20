@@ -8,7 +8,7 @@ entity Fetch_Latch is
       --inputs
       Instruction : IN STD_LOGIC_VECTOR(15 downto 0);
       F_INST : OUT STD_LOGIC_VECTOR(15 downto 0);
-      --new signals for branch
+      --branch signals
       PC_IN : IN STD_LOGIC_VECTOR(15 downto 0);
       F_displacementl: out STD_LOGIC_VECTOR(8 downto 0);
       F_displacements : out STD_LOGIC_VECTOR(5 downto 0);

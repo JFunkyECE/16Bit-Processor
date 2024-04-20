@@ -1,6 +1,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL; -- For signed arithmetic
+use IEEE.NUMERIC_STD.ALL; 
+
+-- This file is a submodule of the ALU 
+-- It provides support for signed Addition, Subtraction, and NAND operations
 
 package AddSubNand is
     -- Function for addition

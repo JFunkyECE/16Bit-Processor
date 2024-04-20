@@ -30,7 +30,7 @@ ARCHITECTURE behavior OF Control_tb  IS
 --    SIGNAL forwardedoutB : STD_LOGIC_VECTOR(15 downto 0);
 --    SIGNAL Decode_to_forward_A : STD_LOGIC_VECTOR(15 downto 0);
 --    SIGNAL Decode_to_forward_B : STD_LOGIC_VECTOR(15 downto 0);
-    COMPONENT Control
+    COMPONENT CPU
     PORT(
       clk : in STD_LOGIC;
       rst : in STD_LOGIC;
@@ -68,7 +68,7 @@ BEGIN
     end process; 
 
     -- Instantiate the Unit Under Test (UUT)
-   uut: Control PORT MAP (
+   uut: CPU PORT MAP (
           clk => clk,
           rst => rst,
           INPUT_SIGNAL => INPUT_SIGNAL,
